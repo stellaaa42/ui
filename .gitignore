@@ -1,12 +1,54 @@
-CMakeLists.txt.user
-CMakeCache.txt
-CMakeFiles
-CMakeScripts
-Testing
-Makefile
-cmake_install.cmake
-install_manifest.txt
-compile_commands.json
-CTestTestfile.cmake
-_deps
-CMakeUserPresets.json
+# 🚀 General
+__pycache__/
+*.pyc
+*.pyo
+*.swp
+.DS_Store
+.env
+
+# 🚀 Python Virtual Environment
+venv/
+env/
+*.egg-info/
+
+# 🚀 Django
+db.sqlite3
+/media/
+*.log
+instance/
+
+# 🚀 Django Migrations (Only ignore if using database migrations properly)
+*/migrations/*.py
+!*/migrations/__init__.py
+
+# 🚀 Vue.js
+node_modules/
+dist/
+npm-debug.log
+yarn-error.log
+.vite/
+.vscode/
+
+# 🚀 Logs & Temporary Files
+*.log
+*.bak
+*.tmp
+*.pid
+*.seed
+*.lock
+
+# 🚀 Editor/IDE Files
+.idea/
+.vscode/
+*.sublime-workspace
+
+# 🚀 Coverage Reports
+htmlcov/
+.coverage
+*.cover
+.pytest_cache/
+
+# 🚀 System Files
+Thumbs.db
+ehthumbs.db
+
