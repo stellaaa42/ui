@@ -21,19 +21,19 @@ class BookingSerializer(serializers.ModelSerializer):
         model = Booking
         fields = '__all__'
 
-    def create(self, validated_data):
+    # def create(self, validated_data):
         # Create a Stripe Payment Intent (Only Authorize, Not Charge)
-        payment_intent = stripe.PaymentIntent.create(
-            amount=5000,  # Example: $50.00 (Stripe uses cents)
-            currency="eur",
-            payment_method_types=["card"],
-            capture_method="manual",  # Manual capture ensures no immediate charge
-        )
+        # payment_intent = stripe.PaymentIntent.create(
+        #     amount=5000,  # Example: $50.00 (Stripe uses cents)
+        #     currency="eur",
+        #     payment_method_types=["card"],
+        #     capture_method="manual",  # Manual capture ensures no immediate charge
+        # )
 
-        validated_data["payment_intent_id"] = payment_intent["id"]
-        validated_data["payment_status"] = "authorized"
+        # validated_data["payment_intent_id"] = payment_intent["id"]
+        # validated_data["payment_status"] = "authorized"
 
-        return super().create(validated_data)
+        # return super().create(validated_data)
 
 
     def validate_appointment_date(self, value):
@@ -44,7 +44,7 @@ class BookingSerializer(serializers.ModelSerializer):
     
     def validate_card(self, data):
         """Ensure card details are provided if payment method is 'card'"""
-        if data.get("payment_method") == "card":
+        if data.get("payment_method") == "credit_card":
             if not data.get("card_number") or not data.get("card_cvv") or not data.get("card_expiration") or not data.get("billing_address"):
                 raise serializers.ValidationError("All card details must be provided for card payments.")
             

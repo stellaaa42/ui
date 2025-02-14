@@ -4,16 +4,31 @@
       <input v-model="booking.email" type="email" placeholder="Your Email" required /><br>
       <textarea v-model="booking.address" placeholder="Your Address" required></textarea><br>
   
+      <div>
       <label>Select Service:</label>
       <select v-model="booking.service">
-        <option value="standard">Standard (€35/hour)</option>
-        <option value="deep">Deep (€55/hour)</option>
-        <option value="custom">Custom Service (Price Varies)</option>
-      </select><br>
+        <option disabled value="">Select a service</option>
+        <option v-for="service in services" :key="service.id" :value="service.id">
+          {{ service.name }} (€{{ service.price_per_hour }}/hour)
+        </option>
+      </select>
+
+      <p v-if="loading">Loading services...</p>
+      <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+      <p v-if="services.length === 0 && !loading">No services found.</p>
+      </div>
   
       <input v-model="booking.appointment_date" type="date" required /><br>
       <input v-model="booking.appointment_time" type="time" required /><br>
   
+      <label>Select Area:</label>
+      <select v-model="booking.area" required>
+        <option value="" disabled>Select an area</option>
+        <option value="one_bedroom">One Bedroom (20 sqm)</option>
+        <option value="two_bedroom">Two Bedrooms (40 sqm)</option>
+        <option value="three_plus_bedroom">Three+ Bedrooms (60 sqm)</option>
+      </select>
+
       <label>Select Payment Method:</label>
       <select v-model="booking.payment_method">
         <option value="card">Credit/Debit Card</option>
@@ -27,6 +42,7 @@
       </div>
   
       <button type="submit">Submit Booking</button>
+      <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
     </form>
   </template>
   
@@ -36,28 +52,64 @@
   export default {
     data() {
       return {
+        services: [],
         booking: {
           name: '',
           email: '',
           address: '',
-          service: 'standard',
+          service: '',
           appointment_date: '',
           appointment_time: '',
+          area: '',
           payment_method: '',
           card_number: '',
           card_cvv: '',
           card_expiration: ''
-        }
+        },
+        loading:false,
+        errorMessage: ''
       };
     },
+
+    async mounted() {
+      this.fetchServices();
+    },
+
     methods: {
-      async submitBooking() {
+      async fetchServices() {
+        this.loading = true;
+        this.errorMessage = null;
         try {
-            await apiClient.post("book/", this.booking);
-        //   const response = await apiClient.post("book/", this.booking);
+          const response = await apiClient.get("items/"); 
+          console.log("form_page Fetched services:", response.data);
+          this.services = response.data;
+          console.log("form_page Updated services (Vue):", this.services);
+        } catch (error) {
+          console.error("Error fetching services:", error);
+          this.errorMessage = "Failed to load services.";
+        } finally {
+          this.loading = false;
+        }
+      },
+
+      async submitBooking() {
+        console.log("Submitting Booking:", this.booking);  // ✅ Log the request data
+        try {
+          const csrfToken = document.querySelector('input[name="csrfmiddlewaretoken"]')?.value || "";
+
+          const response = await apiClient.post("book/", this.booking, {
+            headers: {
+              "X-CSRFToken": csrfToken,  // ✅ Include CSRF token
+            },
+            withCredentials: true,
+          });
+            
+          console.log("Success:", response.data);
           alert("Booking Successful!");
         } catch (error) {
-          alert("Error submitting booking: " + error);
+          console.error("Error submitting booking:", error.response ? error.response.data : error);
+          this.errorMessage = "Error submitting booking. Please check your details.";
+          alert("Error submitting booking: " + (error.response ? JSON.stringify(error.response.data) : error));
         }
       }
     }

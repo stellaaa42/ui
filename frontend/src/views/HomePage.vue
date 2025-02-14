@@ -1,23 +1,68 @@
 <template>
-  <div class="hero">
-    <div class="content">
-      <h1>Premium On-Demand Services</h1>
-      <p>Book professional services with ease.</p>
-      <div class="buttons">
-        <router-link to="/book" class="btn primary">Book Now</router-link>
-        <router-link to="/services" class="btn secondary">Learn More</router-link>
+  <div>
+    <div class="hero">
+      <div class="content">
+        <h1>Premium On-Demand Services</h1>
+        <p>Book professional services with ease.</p>
+        <div class="buttons">
+          <router-link to="/book" class="btn primary">Book Now</router-link>
+          <router-link to="/" class="btn secondary">Learn More</router-link>
+        </div>
       </div>
     </div>
+  <section class="services">
+      <h2>Our Services</h2>
+      <p v-if="loading">Loading services...</p>
+      <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+
+      <ul v-if="services.length">
+        <li v-for="service in services" :key="service.id">
+          {{ service.name }} (€{{ service.price_per_hour }}/hour)
+        </li>
+      </ul>
+
+      <p v-if="!loading && services.length === 0">No services available.</p>
+    </section>
   </div>
 </template>
 
 <script>
+
+import apiClient from "@/utils/axios.js";
+
 export default {
-  name: "HomePage"
+  name: "HomePage",
+  data() {
+    return {
+      services: [],
+      loading: false,
+      errorMessage: null,
+    };
+  },
+  async mounted() {
+    this.fetchServices();
+  },
+  methods: {
+    async fetchServices() {
+      this.loading = true;
+      this.errorMessage = null;
+      try {
+        const response = await apiClient.get("items/"); 
+        console.log("home_page Fetched services:", response.data);
+        this.services = response.data;
+        console.log("home_page Updated services (Vue):", this.services);
+      } catch (error) {
+        console.error("Error fetching services:", error);
+        this.errorMessage = "Failed to load services.";
+      } finally {
+        this.loading = false;
+      }
+    },
+  },
 };
 </script>
 
-<style scoped>
+<style>
 .hero {
   position: relative;
   width: 100%;
@@ -76,4 +121,63 @@ p {
 .secondary:hover {
   background: rgba(255, 255, 255, 0.8);
 }
+
+.services {
+  text-align: center;
+  padding: 60px 20px;
+  background: #f8f9fa;
+}
+
+h2 {
+  font-size: 36px;
+  font-weight: bold;
+  margin-bottom: 30px;
+}
+
+/* Loading & Error Messages */
+.loading,
+.empty,
+.error {
+  font-size: 18px;
+  margin-top: 20px;
+}
+
+.error {
+  color: red;
+}
+
+/* Service List */
+.service-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.service-card {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
+  width: 280px;
+  text-align: center;
+}
+
+.service-card:hover {
+  transform: translateY(-5px);
+}
+
+.service-card h3 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.price {
+  font-size: 20px;
+  font-weight: bold;
+  color: #0056ff;
+}
+
 </style>
