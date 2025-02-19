@@ -5,7 +5,7 @@
       <textarea v-model="booking.address" placeholder="Your Address" required></textarea><br>
   
       <div>
-      <label>Select Service:</label>
+      <label>Select A Service:</label>
       <select v-model="booking.service">
         <option disabled value="">Select a service</option>
         <option v-for="service in services" :key="service.id" :value="service.id">
@@ -16,18 +16,21 @@
       <p v-if="loading">Loading services...</p>
       <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
       <p v-if="services.length === 0 && !loading">No services found.</p>
-      </div>
-  
+      
+      <label>Select Area:</label>
+      <select v-model="booking.area">
+        <option disabled value="">Select An Area</option>
+        <option v-for="area in areas" :key="area.id" :value="area.id">
+          {{ area.name }} ({{ area.description }})
+        </option>
+      </select>
+      <p v-if="loadingAreas">Loading areas...</p>
+      <p v-if="areaError" class="error">{{ areaError }}</p>
+      <p v-if="areas.length === 0 && !loadingAreas">No areas found.</p>
+    </div>
+
       <input v-model="booking.appointment_date" type="date" required /><br>
       <input v-model="booking.appointment_time" type="time" required /><br>
-  
-      <label>Select Area:</label>
-      <select v-model="booking.area" required>
-        <option value="" disabled>Select an area</option>
-        <option value="one_bedroom">One Bedroom (20 sqm)</option>
-        <option value="two_bedroom">Two Bedrooms (40 sqm)</option>
-        <option value="three_plus_bedroom">Three+ Bedrooms (60 sqm)</option>
-      </select>
 
       <label>Select Payment Method:</label>
       <select v-model="booking.payment_method">
@@ -53,26 +56,31 @@
     data() {
       return {
         services: [],
+        areas: [],
         booking: {
           name: '',
           email: '',
           address: '',
           service: '',
+          area: '',
           appointment_date: '',
           appointment_time: '',
-          area: '',
           payment_method: '',
           card_number: '',
           card_cvv: '',
           card_expiration: ''
         },
         loading:false,
-        errorMessage: ''
+        errorMessage: '',
+        loadingAreas: false,
+        areaError: ''
+
       };
     },
 
     async mounted() {
       this.fetchServices();
+      this.fetchAreas();
     },
 
     methods: {
@@ -92,10 +100,27 @@
         }
       },
 
+      async fetchAreas() {
+        this.loadingAreas = true;
+        this.areaError = null;
+      try {
+        const response = await apiClient.get("areas/");
+        console.log("form_page Fetched areas:", response.data);
+        this.areas = response.data;
+        console.log("form_page Updated services (Vue):", this.areas);
+      } catch (error) {
+        this.areaError = "Failed to load areas. Please try again.";
+        console.error("Area fetch error:", error);
+      } finally {
+        this.loadingAreas = false;
+      }
+    },
+      
       async submitBooking() {
         console.log("Submitting Booking:", this.booking);  // ✅ Log the request data
+        
         try {
-          const csrfToken = document.querySelector('input[name="csrfmiddlewaretoken"]')?.value || "";
+          const csrfToken = document.cookie.match(/csrftoken=([^;]+)/)?.[1] || "";
 
           const response = await apiClient.post("book/", this.booking, {
             headers: {

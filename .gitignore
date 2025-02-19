@@ -16,6 +16,7 @@ db.sqlite3
 /media/
 *.log
 instance/
+db_backup.sqlite3
 
 # 🚀 Django Migrations (Only ignore if using database migrations properly)
 */migrations/*.py

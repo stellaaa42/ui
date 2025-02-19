@@ -3,9 +3,9 @@ curl -X POST http://127.0.0.1:8000/api/book/ -H "Content-Type: application/json"
         "name": "John Doe",
         "email": "john@example.com",
         "address": "123 Main St",
-        "service": 1,
-        "appointment_date": "2025-02-15",
+        "service": 3,
+        "area": 2,
+        "appointment_date": "2025-03-15",
         "appointment_time": "14:00",
-        "area": "two",
         "payment_method": "paypal"
     }'

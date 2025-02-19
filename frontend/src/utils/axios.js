@@ -9,9 +9,16 @@ const apiClient = axios.create({
   withCredentials: true
 });
 
-// function getCSRFToken() {
-//   const cookie = document.cookie.split("; ").find(row => row.startsWith("csrftoken="));
-//   return cookie ? cookie.split("=")[1] : "";
-// }
+async function fetchCsrfToken() {
+  try {
+      const response = await apiClient.get("/csrf/");
+      document.cookie = `csrftoken=${response.data.csrfToken}; path=/`;  // Store token in cookie
+      apiClient.defaults.headers.common["X-CSRFToken"] = response.data.csrfToken;
+  } catch (error) {
+      console.error("CSRF token fetch failed:", error);
+  }
+}
+
+fetchCsrfToken();
 
 export default apiClient;

@@ -53,16 +53,25 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# CORS_ALLOW_ALL_ORIGINS = True
+# Disable for production
+CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:8080'
+    'http://localhost:8080',
+    "http://127.0.0.1:8000",
 ]    
 
 CSRF_TRUSTED_ORIGINS = [
-    "http://localhost:8080",  # ✅ Prevents CSRF issues
+    "http://localhost:8080", 
+    "http://127.0.0.1:8000",
 ]
+
+
+CSRF_COOKIE_HTTPONLY = False  # Vue can't read HTTP-only cookies
+CSRF_COOKIE_SECURE = False  # Set to True in production (for HTTPS)
+CSRF_USE_SESSIONS = False  # Set to True if using session authentication
+
 
 
 ROOT_URLCONF = 'backend.urls'

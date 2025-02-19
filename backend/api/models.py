@@ -8,17 +8,17 @@ class Item(models.Model):
     def __str__(self):
         return f"{self.name} - €{self.price_per_hour}/hour"
 
+class Area(models.Model):
+    name = models.CharField(max_length=50)
+    description = models.TextField(blank=True)
+
+    def __str__(self):
+        return f"{self.name} - {self.description}"
+
 class Booking(models.Model):
-
-    AREA_CHOICES = [
-        ('one', 'One (20 sqm)'),
-        ('two', 'Two (40 sqm)'),
-        ('three_plus', 'Three or More (60 sqm)'),
-    ]
-
     PAYMENT_CHOICES = [
             ('credit_card', 'Credit Card'),
-            ('debit`card', 'Debit Card'),
+            ('debit_card', 'Debit Card'),
             ('paypal', 'PayPal'),
         ]
 
@@ -30,7 +30,7 @@ class Booking(models.Model):
     appointment_time = models.TimeField(blank=True, null=True)
 
     service = models.ForeignKey('Item', on_delete=models.CASCADE)
-    area = models.CharField(max_length=20, choices=AREA_CHOICES) 
+    area = models.ForeignKey('Area', on_delete=models.CASCADE)
 
     message = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -40,10 +40,10 @@ class Booking(models.Model):
     payment_method = models.CharField(max_length=12, choices=PAYMENT_CHOICES, blank=True, null=True)
     card_number = models.CharField(max_length=16, blank=True, null=True)
     card_cvv = models.CharField(max_length=3, blank=True, null=True)  # Optional
-    card_expiration = models.DateField(max_length=7, blank=True, null=True)  # Format: MM/YYYY
+    card_expiration = models.CharField(max_length=7, blank=True, null=True)  # Optional
     billing_address = models.TextField(blank=True, null=True)  # Optional
 
 
     def __str__(self):
-        return f"Booking by {self.name}, {self.email}, {self.phone} on {self.appointment_date} at {self.appointment_time}, {self.message}, {self.created_at}"
+        return f"Booking by {self.name}, {self.email}, {self.phone}, {self.address}, {self.service}, {self.area} on {self.appointment_date} at {self.appointment_time}, {self.message}, {self.created_at}"
 
