@@ -1,8 +1,9 @@
 from rest_framework import generics
 from .models import Booking, Item, Area
 from .serializers import BookingSerializer, ItemSerializer, AreaSerializer
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from django.utils.decorators import method_decorator
+from django.http import JsonResponse
 
 class ItemListView(generics.ListAPIView):
     queryset = Item.objects.all()
@@ -21,3 +22,7 @@ class BookingCreateView(generics.CreateAPIView):
         # Custom logic before saving (e.g., logging, data transformation)
         booking = serializer.save()
         print(f"New booking created: {booking.name} for {booking.appointment_date} at {booking.appointment_time}")
+
+@ensure_csrf_cookie
+def get_csrf_token(request):
+    return JsonResponse({'csrfToken': request.META.get('CSRF_COOKIE')})

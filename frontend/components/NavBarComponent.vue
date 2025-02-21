@@ -2,16 +2,13 @@
     <nav>
       <div class="logo">Service</div>
       <div class="menu">
-        <router-link to="/">Home</router-link>
-        <router-link to="/book">Book Now</router-link>
+        <NuxtLink to="/">Home</NuxtLink>
+        <NuxtLink to="/book">Book Now</NuxtLink>
       </div>
     </nav>
   </template>
   
-  <script>
-  export default {
-    name: "NavBarComponent"
-  };
+  <script setup>
   </script>
   
   <style scoped>

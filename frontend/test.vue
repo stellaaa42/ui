@@ -5,8 +5,8 @@
         <h1>Premium On-Demand Services</h1>
         <p>Book professional services with ease.</p>
         <div class="buttons">
-          <router-link to="/book" class="btn primary">Book Now</router-link>
-          <router-link to="/" class="btn secondary">Learn More</router-link>
+          <NuxtLink to="/book" class="btn primary">Book Now</NuxtLink>
+          <NuxtLink to="/" class="btn secondary">Learn More</NuxtLink>
         </div>
       </div>
     </div>
@@ -26,40 +26,18 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { useFetch } from '#app';
+import { ref } from 'vue';
 
-import apiClient from "@/utils/axios.js";
+// Fetch services using useFetch
+const { data: servicesData, pending, error } = await useFetch('/items/');
 
-export default {
-  name: "HomePage",
-  data() {
-    return {
-      services: [],
-      loading: false,
-      errorMessage: null,
-    };
-  },
-  async mounted() {
-    this.fetchServices();
-  },
-  methods: {
-    async fetchServices() {
-      this.loading = true;
-      this.errorMessage = null;
-      try {
-        const response = await apiClient.get("items/"); 
-        console.log("home_page Fetched services:", response.data);
-        this.services = response.data;
-        console.log("home_page Updated services (Vue):", this.services);
-      } catch (error) {
-        console.error("Error fetching services:", error);
-        this.errorMessage = "Failed to load services.";
-      } finally {
-        this.loading = false;
-      }
-    },
-  },
-};
+const services = ref(servicesData.value || []);
+
+if (error.value) {
+  console.error("Error fetching services:", error.value);
+}
 </script>
 
 <style>
