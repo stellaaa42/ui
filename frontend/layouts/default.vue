@@ -1,18 +1,16 @@
-<!-- layouts/default.vue -->
 <template>
-    <div>
-      <NavBarComponent />
-      <NuxtPage /> <!-- Renders page components -->
-    </div>
-  </template>
-  
-  <script setup>
-  import NavBarComponent from '~/components/NavBarComponent.vue'
-  </script>
-  
-  <style>
-  body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-  }
-  </style>
+  <div>
+    <header>
+      <h1>My Nuxt App</h1>
+    </header>
+    <NuxtPage />
+  </div>
+</template>
+
+<style scoped>
+header {
+  background-color: #f5f5f5;
+  padding: 10px;
+  text-align: center;
+}
+</style>
