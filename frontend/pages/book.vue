@@ -12,6 +12,7 @@
             {{ service.name }} (€{{ service.price_per_hour }}/hour)
           </option>
         </select>
+
   
         <p v-if="loading">Loading services...</p>
         <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
@@ -51,9 +52,8 @@
   
   <script setup>
   import { ref, onMounted } from 'vue';
-  import axios from 'axios';
 
-  
+  const { $axios } = useNuxtApp();
   // Reactive state variables
   const services = ref([]);
   const areas = ref([]);
@@ -81,7 +81,8 @@
     loading.value = true;
     errorMessage.value = '';
     try {
-      const response = await $axios.get('http://localhost:8000/api/items/');
+      const response = await $axios.get('items/');
+      console.log('book-service', response);
       services.value = response.data;
     } catch (error) {
       errorMessage.value = 'Failed to load services.';
@@ -96,7 +97,8 @@
     loadingAreas.value = true;
     areaError.value = '';
     try {
-      const response = await $axios.get('http://localhost:8000/api/areas/');
+      const response = await $axios.get('areas/');
+      console.log('book-area', response);
       areas.value = response.data;
     } catch (error) {
       areaError.value = 'Failed to load areas. Please try again.';

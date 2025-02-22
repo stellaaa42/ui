@@ -27,6 +27,7 @@
   const fetchServices = async () => {
     try {
       const response = await $axios.get('items/');
+      console.log('servicelist', response);
     //   const response = await $fetch(`${config.public.apiBase}items/`);
       services.value = response.data;
     } catch (error) {

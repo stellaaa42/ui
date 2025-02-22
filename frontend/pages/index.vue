@@ -17,24 +17,6 @@
 </template>
 
 <script setup>
-import { useFetch } from '#app';
-import { ref, watchEffect } from 'vue';
-
-const services = ref([]);
-const loading = ref(true);
-const errorMessage = ref('');
-
-const { data, pending, error } = await useFetch('/items/');
-
-watchEffect(() => {
-  loading.value = pending.value;
-  if (error.value) {
-    errorMessage.value = 'Error fetching services.';
-    console.error("Error fetching services:", error.value);
-  } else if (data.value) {
-    services.value = data.value;
-  }
-});
 </script>
 
 <style scoped>
