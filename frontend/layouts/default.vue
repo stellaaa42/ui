@@ -1,7 +1,7 @@
 <template>
   <div>
     <header>
-      <h1>My Nuxt App</h1>
+      <h1>We Provide The Cheapest And Best Service</h1>
     </header>
     <NuxtPage />
   </div>

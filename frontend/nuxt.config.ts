@@ -24,28 +24,7 @@
 export default defineNuxtConfig({
   modules: [],
   css: [],
+  build: {},
 
-  app: {
-    head: {
-      title: 'Nuxt App',
-      meta: [
-        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: 'My Nuxt 3 Application' }
-      ],
-      link: [
-        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-      ]
-    }
-  },
-
-  vite: {
-    clearScreen: false,
-    server: {
-      watch: {
-        usePolling: true
-      }
-    }
-  },
-
-  compatibilityDate: '2025-02-21'
+  compatibilityDate: '2025-02-22'
 });

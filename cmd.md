@@ -26,3 +26,4 @@ Area.objects.all().values()
 
 
 
+

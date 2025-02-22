@@ -51,10 +51,8 @@
   
   <script setup>
   import { ref, onMounted } from 'vue';
-  import { useRuntimeConfig, useNuxtApp } from '#app';
-  
-  const { $axios } = useNuxtApp();
-  const config = useRuntimeConfig();
+  import axios from 'axios';
+
   
   // Reactive state variables
   const services = ref([]);
@@ -83,7 +81,7 @@
     loading.value = true;
     errorMessage.value = '';
     try {
-      const response = await $axios.get('items/');
+      const response = await $axios.get('http://localhost:8000/api/items/');
       services.value = response.data;
     } catch (error) {
       errorMessage.value = 'Failed to load services.';
@@ -98,7 +96,7 @@
     loadingAreas.value = true;
     areaError.value = '';
     try {
-      const response = await $axios.get('areas/');
+      const response = await $axios.get('http://localhost:8000/api/areas/');
       areas.value = response.data;
     } catch (error) {
       areaError.value = 'Failed to load areas. Please try again.';
