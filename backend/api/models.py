@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
 class Item(models.Model):
     name = models.CharField(max_length=50)
@@ -47,3 +48,9 @@ class Booking(models.Model):
     def __str__(self):
         return f"Booking by {self.name}, {self.email}, {self.phone}, {self.address}, {self.service}, {self.area} on {self.appointment_date} at {self.appointment_time}, {self.message}, {self.created_at}"
 
+class CustomUser(AbstractUser):
+    email = models.EmailField(unique=True)
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.username

@@ -1,8 +1,9 @@
 <template>
   <div>
     <header>
-      <h1>We Provide The Cheapest And Best Service</h1>
+      <h1>Service</h1>
     </header>
+    <Navbar />
     <NuxtPage />
   </div>
 </template>
@@ -14,3 +15,8 @@ header {
   text-align: center;
 }
 </style>
+
+
+<script setup>
+import Navbar from "~/components/NavBar.vue";
+</script>
