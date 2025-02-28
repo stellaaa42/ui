@@ -7,19 +7,21 @@
       <input v-model="password" type="password" placeholder="Password" required />
       <button type="submit">Signup</button>
     </form>
-    <p v-if="errorMessage">{{ errorMessage }}</p>
+    <p v-if="successMessage" class="success">{{ successMessage }}</p>
+    <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
   </div>
 </template>
 
 <script setup>
 import { ref } from "vue";
-const { $axios } = useNuxtApp();
 
+const { $axios } = useNuxtApp();
 const username = ref("");
 const email = ref("");
 const password = ref("");
+const successMessage = ref("");
 const errorMessage = ref("");
-const auth = useAuth();
+
 
 const signup = async () => {
   try {
@@ -30,11 +32,12 @@ const signup = async () => {
     });
 
     if (response.data.access) {
-      await auth.setUserToken(response.access, response.refresh);
-      navigateTo("/longin");
+      successMessage.value = "Signup successful! Redirecting...";
+      localStorage.setItem("token", response.data.access);
+    setTimeout(() => navigateTo("/login"));
     }
   } catch (err) {
-    errorMessage.value = err.response._data.error || "Signup failed";
+    errorMessage.value = err.response._data.error || "Signup failed. Try again.";
   }
 };
 </script>
@@ -58,5 +61,11 @@ button {
   color: white;
   border: none;
   cursor: pointer;
+}
+.success {
+  color: green;
+}
+.error {
+  color: red;
 }
 </style>

@@ -6,27 +6,30 @@
       <input v-model="password" type="password" placeholder="Password" required />
       <button type="submit">Login</button>
     </form>
-    <p v-if="errorMessage">{{ errorMessage }}</p>
+    <p v-if="successMessage" class="success">{{ successMessage }}</p>
+    <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
   </div>
 </template>
 
 <script setup>
-import { ref, useNuxtApp } from "vue";
-const { $axios, $authConfig } = useNuxtApp();;
+import { ref } from "vue";
+import { useNuxtApp } from "#imports";
 
+const { $axios } = useNuxtApp();;
 const username = ref("");
 const password = ref("");
+const successMessage = ref("");
 const errorMessage = ref("");
-const auth = useAuth();
 
 const login = async () => {
     try {
-        const response = await $axios.post("/api/login/", {
+        const response = await $axios.post("login/", {
         username: username.value,
         password: password.value,
     });
 
     if (response.data.access) {
+      successMessage.value = "Login successful! Redirecting...";
       navigateTo("/");
     }
   } catch (err) {

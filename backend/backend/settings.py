@@ -69,6 +69,11 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 
+AUTH_USER_MODEL = 'api.CustomUser'
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+]
+
 CSRF_COOKIE_HTTPONLY = False  # Vue can't read HTTP-only cookies
 CSRF_COOKIE_SECURE = False  # Set to True in production (for HTTPS)
 CSRF_USE_SESSIONS = False  # Set to True if using session authentication
@@ -113,7 +118,6 @@ DATABASES = {
     }
 }
 
-AUTH_USER_MODEL = 'api.CustomUser'
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators

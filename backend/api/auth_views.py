@@ -7,7 +7,6 @@ from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
 
 
-
 User = get_user_model()
 class SignupView(APIView):
     permission_classes = [AllowAny]
@@ -39,14 +38,19 @@ class LoginView(APIView):
         username = request.data.get("username")
         password = request.data.get("password")
 
+        print(f"🔍 DEBUG: Attempting login for {username}") 
         user = authenticate(username=username, password=password)
         if user:
+            print(f"✅ DEBUG: Authentication successful for {user.username}") 
             refresh = RefreshToken.for_user(user)
             return Response({
                 "access": str(refresh.access_token),
                 "refresh": str(refresh),
             })
-        return Response({"error": "Invalid Credentials"}, status=status.HTTP_401_UNAUTHORIZED)
+        else:
+            print("❌ DEBUG: Authentication failed!")
+            return Response({"error": "Invalid Credentials"}, status=status.HTTP_401_UNAUTHORIZED)
+
 
 class LogoutView(APIView):
     def post(self, request):
@@ -58,7 +62,7 @@ class LogoutView(APIView):
         except Exception:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
-# class CustomerDashboardView(APIView):
+# class DashboardView(APIView):
 #     def get(self, request):
 #         user = request.user
 #         return Response({"message": f"Welcome, {user.username}!"})
