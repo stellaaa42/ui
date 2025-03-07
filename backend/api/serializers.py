@@ -19,7 +19,6 @@ class AreaSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class BookingSerializer(serializers.ModelSerializer):
-    # Allow selection of service
     service = serializers.PrimaryKeyRelatedField(queryset=Item.objects.all()) 
     # payment_intent_id = serializers.CharField(read_only=True)
     

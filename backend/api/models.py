@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.conf import settings
 
 class Item(models.Model):
     name = models.CharField(max_length=50)
@@ -35,6 +36,7 @@ class Booking(models.Model):
 
     message = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)  # ✅ FIXED
 
     # Stripe Payment Intent ID
     # payment_intent_id = models.CharField(max_length=255, blank=True, null=True)  

@@ -1,68 +1,62 @@
-from rest_framework import status
-from django.contrib.auth import get_user_model, authenticate
-from rest_framework import status
-from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
-
+from django.contrib.auth import authenticate, get_user_model
+from django.contrib.auth.models import User
+from django.http import JsonResponse
+from django.contrib.auth.hashers import make_password
 
 User = get_user_model()
+
 class SignupView(APIView):
+    permission_classes = [AllowAny]  # Because, duh, new users need access
+
+    def post(self, request):
+        username = request.data.get("username")
+        password = request.data.get("password")
+
+        if not username or not password:
+            return Response({"error": "Username and password are required"}, status=400)
+
+        if User.objects.filter(username=username).exists():
+            return Response({"error": "Username already taken"}, status=400)
+
+        user = User.objects.create(username=username, password=make_password(password))
+        return Response({"message": "Signup successful, now go login."}, status=201)
+
+class LoginView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
         username = request.data.get("username")
-        email = request.data.get("email")
         password = request.data.get("password")
 
-        if not username or not email or not password:
-            return Response({"error": "All fields are required"}, status=status.HTTP_400_BAD_REQUEST)
-
-        if User.objects.filter(username=username).exists():
-            return Response({"error": "Username already exists"}, status=status.HTTP_400_BAD_REQUEST)
-
-        if User.objects.filter(email=email).exists():
-            return Response({"error": "Email already registered"}, status=status.HTTP_400_BAD_REQUEST)
-
-        user = User.objects.create_user(username=username, email=email, password=password)
-
-        refresh = RefreshToken.for_user(user)
-        return Response({
-            "access": str(refresh.access_token),
-            "refresh": str(refresh)
-        }, status=status.HTTP_201_CREATED)
-    
-class LoginView(APIView):
-    def post(self, request):
-        username = request.data.get("username")
-        password = request.data.get("password")
-
-        print(f"🔍 DEBUG: Attempting login for {username}") 
         user = authenticate(username=username, password=password)
         if user:
-            print(f"✅ DEBUG: Authentication successful for {user.username}") 
             refresh = RefreshToken.for_user(user)
-            return Response({
+            response = Response({
                 "access": str(refresh.access_token),
-                "refresh": str(refresh),
+                "user": {"name": user.username}
             })
-        else:
-            print("❌ DEBUG: Authentication failed!")
-            return Response({"error": "Invalid Credentials"}, status=status.HTTP_401_UNAUTHORIZED)
+            response.set_cookie("refresh_token", str(refresh), httponly=True, samesite="Lax")
+            return response
+        return Response({"error": "Invalid credentials"}, status=400)
 
+class RefreshTokenView(APIView):
+    def post(self, request):
+        refresh_token = request.COOKIES.get("refresh_token")
+        if not refresh_token:
+            return Response({"error": "Refresh token missing"}, status=403)
+
+        try:
+            refresh = RefreshToken(refresh_token)
+            return Response({"access": str(refresh.access_token)})
+        except Exception:
+            return Response({"error": "Invalid refresh token"}, status=403)
 
 class LogoutView(APIView):
     def post(self, request):
-        try:
-            refresh_token = request.data["refresh"]
-            token = RefreshToken(refresh_token)
-            token.blacklist()
-            return Response(status=status.HTTP_205_RESET_CONTENT)
-        except Exception:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-        
-# class DashboardView(APIView):
-#     def get(self, request):
-#         user = request.user
-#         return Response({"message": f"Welcome, {user.username}!"})
+        response = JsonResponse({"message": "Logged out"})
+        response.delete_cookie("refresh_token")
+        return response

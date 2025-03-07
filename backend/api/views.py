@@ -1,10 +1,10 @@
-from rest_framework import generics
 from .models import Booking, Item, Area
-from .serializers import BookingSerializer, ItemSerializer, AreaSerializer
-from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
-from django.utils.decorators import method_decorator
+from .serializers import BookingSerializer, ItemSerializer, AreaSerializer, BookingSerializer
+from django.views.decorators.csrf import ensure_csrf_cookie
 from django.http import JsonResponse
-
+from rest_framework import generics, status
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 
 
 class ItemListView(generics.ListAPIView):
@@ -15,16 +15,24 @@ class AreaListView(generics.ListAPIView):
     queryset = Area.objects.all()
     serializer_class = AreaSerializer
 
-@method_decorator(csrf_exempt, name='dispatch')
-class BookingCreateView(generics.CreateAPIView):
-    queryset = Booking.objects.all()
+class BookingCreateView(generics.CreateAPIView):  # ✅ Only allows POST (no GET)
     serializer_class = BookingSerializer
-    
-    def perform_create(self, serializer):
-        # Custom logic before saving (e.g., logging, data transformation)
-        booking = serializer.save()
-        print(f"New booking created: {booking.name} for {booking.appointment_date} at {booking.appointment_time}")
 
+    def get(self, request, *args, **kwargs):
+        return Response({"message": "Book list"}, status=status.HTTP_200_OK)
+
+    def perform_create(self, serializer):
+        serializer.save()
+        return Response({"message": "Booking created successfully!"}, status=status.HTTP_201_CREATED)
+ 
+class UserBookingListView(generics.ListAPIView):  # ✅ Only allows users to see their own bookings
+    serializer_class = BookingSerializer
+    permission_classes = [IsAuthenticated]  # ✅ Requires login to see bookings
+
+    def get_queryset(self):
+        """Return only bookings that belong to the logged-in user."""
+        return Booking.objects.filter(user=self.request.user)  # ✅ Only return user's own bookings
+    
 @ensure_csrf_cookie
 def get_csrf_token(request):
     return JsonResponse({'csrfToken': request.META.get('CSRF_COOKIE')})

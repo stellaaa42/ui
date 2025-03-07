@@ -15,33 +15,37 @@
   </template>
   
   <script setup>
-  import { ref, onMounted } from 'vue';
-//   import { useRuntimeConfig } from '#app';
+    import { ref, onMounted } from "vue";
+    import { useRuntimeConfig } from "#app";
 
-  const { $axios } = useNuxtApp();
-    // const config = useRuntimeConfig();
-  const services = ref([]);
-  const loading = ref(true);
-  const errorMessage = ref('');
-  
-  const fetchServices = async () => {
-    try {
-      const response = await $axios.get('items/');
-      console.log('servicelist', response);
-    //   const response = await $fetch(`${config.public.apiBase}items/`);
-      services.value = response.data;
-    } catch (error) {
-      errorMessage.value = 'Error fetching services.';
-      console.error('Error fetching services:', error);
-    } finally {
+    const config = useRuntimeConfig(); // ✅ Fetch API base from Nuxt config
+    const services = ref([]);
+    const loading = ref(true);
+    const errorMessage = ref("");
+
+    const fetchServices = async () => {
+      loading.value = true;
+      errorMessage.value = "";
+
+      const { data, error } = await useFetch("/items", {
+        baseURL: config.public.apiBase, // ✅ Ensures correct backend URL
+      });
+
+      if (error.value) {
+        errorMessage.value = "Error fetching services.";
+        console.error("Error fetching services:", error.value);
+      } else {
+        console.log("servicelist", data.value);
+        services.value = data.value;
+      }
+
       loading.value = false;
-    }
-  };
-  
-  // ✅ Triggers fetch after component is mounted
-  onMounted(() => {
-    fetchServices();
-  });
+    };
+
+    // ✅ Fetch services when component is mounted
+    onMounted(() => {
+      fetchServices();
+    });
   </script>
   
   <style scoped>

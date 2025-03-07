@@ -52,9 +52,11 @@
   
   <script setup>
   import { ref, onMounted } from 'vue';
+  import { useFetch, useRuntimeConfig, useRouter } from "#app";
 
-  const { $axios } = useNuxtApp();
-  // Reactive state variables
+  const config = useRuntimeConfig();
+  const router = useRouter();
+
   const services = ref([]);
   const areas = ref([]);
   const loading = ref(false);
@@ -76,62 +78,67 @@
     card_expiration: ''
   });
   
-  // Fetch Services
   const fetchServices = async () => {
-    loading.value = true;
-    errorMessage.value = '';
-    try {
-      const response = await $axios.get('items/');
-      console.log('book-service', response);
-      services.value = response.data;
-    } catch (error) {
-      errorMessage.value = 'Failed to load services.';
-      console.error("Service fetch error:", error);
-    } finally {
-      loading.value = false;
-    }
-  };
-  
-  // Fetch Areas
+  loading.value = true;
+  errorMessage.value = "";
+
+  const { data, error } = await useFetch("/items", {
+    baseURL: config.public.apiBase, // ✅ Uses the correct backend API
+  });
+
+  if (error.value) {
+    errorMessage.value = "Failed to load services.";
+    console.error("Service fetch error:", error.value);
+  } else {
+    services.value = data.value;
+  }
+
+  loading.value = false;
+};
+
   const fetchAreas = async () => {
     loadingAreas.value = true;
-    areaError.value = '';
-    try {
-      const response = await $axios.get('areas/');
-      console.log('book-area', response);
-      areas.value = response.data;
-    } catch (error) {
-      areaError.value = 'Failed to load areas. Please try again.';
-      console.error("Area fetch error:", error);
-    } finally {
-      loadingAreas.value = false;
+    areaError.value = "";
+
+    const { data, error } = await useFetch("/areas", {
+      baseURL: config.public.apiBase, // ✅ Uses the correct backend API
+    });
+
+    if (error.value) {
+      areaError.value = "Failed to load areas. Please try again.";
+      console.error("Area fetch error:", error.value);
+    } else {
+      areas.value = data.value;
     }
+
+    loadingAreas.value = false;
   };
-  
-  // Submit Booking
-  const submitBooking = async () => {
-    try {
-      const csrfToken = document.cookie.match(/csrftoken=([^;]+)/)?.[1] || "";
-      const response = await $axios.post('book/', booking.value, {
-        headers: {
-          'X-CSRFToken': csrfToken,
-        },
-        withCredentials: true
-      });
-      console.log("Booking successful:", response.data);
-      alert("Booking Successful!");
-    } catch (error) {
-      console.error("Booking error:", error.response?.data || error);
-      errorMessage.value = "Error submitting booking. Please check your details.";
-      alert("Error submitting booking: " + (error.response ? JSON.stringify(error.response.data) : error));
-    }
-  };
-  
-  // Run on page load
+
   onMounted(() => {
     fetchServices();
     fetchAreas();
   });
+  
+  const submitBooking = async () => {
+    loading.value = true;
+    errorMessage.value = "";
+
+    const { data, error } = await useFetch("/book", {
+      method: "POST",
+      baseURL: config.public.apiBase, // ✅ Uses Nuxt's API base
+      body: booking.value, // ✅ Sends form data correctly
+    });
+
+    if (error.value) {
+      errorMessage.value = "Failed to book. Please try again.";
+      console.error("Booking error:", error.value);
+    } else {
+      console.log("Booking successful:", data.value);
+      router.push("/"); // ✅ Redirect to home after booking
+    }
+
+    loading.value = false;
+  };
   </script>
   
   <style scoped>

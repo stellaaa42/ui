@@ -1,7 +1,7 @@
 <template>
   <div>
     <header>
-      <h1>Service</h1>
+      <h1>default Service</h1>
     </header>
     <Navbar />
     <NuxtPage />
