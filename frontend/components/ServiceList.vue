@@ -27,6 +27,10 @@
       loading.value = true;
       errorMessage.value = "";
 
+      // const response = await fetch(`${config.public.apiBase}/services`);
+      // const json = await response.json();
+      // console.log("🔥 RAW FETCH RESPONSE:", json);
+      await new Promise(resolve => setTimeout(resolve, 1000));
       try {
         const { data, error } = await useFetch("/services", {
           method: "GET",
@@ -40,6 +44,7 @@
           console.error("🚨 Fetch error:", error.value);
         } else {
           console.log("📦 Service List:", data.value);
+          console.log("stringify List:", JSON.stringify(data.value, null, 2));
           services.value = data.value || []; // Ensure it's always an array
         }
       } catch (err) {

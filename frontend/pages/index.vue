@@ -5,7 +5,7 @@
         <h1>Premium On-Demand Services</h1>
         <p>Book professional services with ease.</p>
         <div class="buttons">
-          <!-- <NuxtLink to="/book" no-prefetch class="btn primary">Book Now</NuxtLink> -->
+          <NuxtLink to="/book" no-prefetch class="btn primary">Book Now</NuxtLink>
           <NuxtLink to="/" class="btn secondary">Learn More</NuxtLink>
         </div>
       </div>
@@ -13,20 +13,13 @@
     <section class="services">
       <ServiceList />
     </section>
+    <div>
+      newsletter email <input type="text">
+    </div>
   </div>
 </template>
 
 <script>
-// const config = useRuntimeConfig();
-// console.log("🌍 API Base:", config.public.apiBase);
-
-// const { data, error } = await useFetch(`${config.public.apiBase}/book`, {
-//   method: "POST",
-//   body: { username: "test1" },
-// });
-
-// console.log("📡 API Response:", data.value);
-// console.error("❌ API Error:", error.value);
 </script>
 
 <style scoped>

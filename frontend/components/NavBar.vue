@@ -1,30 +1,16 @@
 <template>
   <nav class="navbar">
-    <NuxtLink to="/" class="logo">🚀 MyApp</NuxtLink>
+    <NuxtLink to="/" class="logo">🚀 LOGO-Home</NuxtLink>
+    <NuxtLink to="/book" class="nav-tab">Book</NuxtLink>
+    <NuxtLink to="/blog" class="nav-tab">Blog</NuxtLink>
+    <NuxtLink to="/about" class="nav-tab">About Us</NuxtLink>
 
     <div class="nav-actions">
       <button v-if="isAuthenticated" @click="logout">Logout</button>
-      <button v-else @click="showAuthModal = true">Signup / Login</button>
+      <NuxtLink v-else to="/login" class="auth-button">Signup / Login</NuxtLink>
     </div>
 
-    <!-- Auth Modal (Login & Signup Tabs) -->
-    <div v-if="showAuthModal" class="modal">
-      <div class="modal-content">
-        <button class="close" @click="showAuthModal = false">×</button>
 
-        <div class="tabs">
-          <button @click="activeTab = 'login'" :class="{ active: activeTab === 'login' }">Login</button>
-          <button @click="activeTab = 'signup'" :class="{ active: activeTab === 'signup' }">Signup</button>
-        </div>
-
-        <div v-if="activeTab === 'login'">
-          <button @click="navigateTo('/login')">Login</button>
-        </div>
-        <div v-if="activeTab === 'signup'">
-          <button @click="navigateTo('/signup')">Signup</button>
-        </div>
-      </div>
-    </div>
   </nav>
 </template>
 
@@ -34,19 +20,12 @@ import { useState } from "#imports";
 import { navigateTo } from "#app";
 
 const isAuthenticated = useState("isAuthenticated", () => false);
-const showAuthModal = ref(false);
-const activeTab = ref("login"); // Default to Login tab
 
 const logout = () => {
   isAuthenticated.value = false; // Simulate logout
   console.log("User logged out!");
 };
 
-const handleAuthSuccess = () => {
-  isAuthenticated.value = true; // Simulate successful login
-  showAuthModal.value = false; // Close modal
-  console.log("User logged in!");
-};
 </script>
 
 <style scoped>

@@ -4,7 +4,7 @@
 
     <!-- OAuth Login Buttons -->
     <div class="oauth-buttons">
-      <button @click="oauthLogin('google')">Login with Google</button>
+      <button @click="oauthLogin('google')">Signup/Login with Google</button>
     </div>
 
     <!-- Login Form -->
@@ -17,9 +17,10 @@
       </button>
     </form>
 
-    <!-- Status Messages -->
+    <NuxtLink to="/signup" no-prefetch class="btn secondary">No account? Signup</NuxtLink>
     <p v-if="successMessage" class="success">{{ successMessage }}</p>
     <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+
   </div>
 </template>
 
@@ -35,47 +36,44 @@ const errorMessage = ref("");
 const loading = ref(false);
 
 // Function to login user
-const login = async () => {
-  errorMessage.value = "";
-  successMessage.value = "";
-  loading.value = true;
+// const login = async () => {
+//   errorMessage.value = "";
+//   successMessage.value = "";
+//   loading.value = true;
 
-  try {
-    const { data, error } = await useFetch("/auth/login", {
-      method: "POST",
-      body: { username: username.value, password: password.value },
-    });
+//   try {
+//     const { data, error } = await useFetch("/auth/login", {
+//       method: "POST",
+//       body: { username: username.value, password: password.value },
+//     });
 
-    if (data.value?.access) {
-      successMessage.value = "Login successful! Redirecting...";
-      useCookie("user").value = data.value.user; // Store user in a cookie
+//     if (data.value?.access) {
+//       successMessage.value = "Login successful! Redirecting...";
+//       useCookie("user").value = data.value.user; // Store user in a cookie
 
-      setTimeout(() => {
-        router.push("/");
-      }, 1500);
-    } else {
-      errorMessage.value = error.value?.message || "Invalid credentials";
-    }
-  } catch (err) {
-    errorMessage.value = "Login failed. Please try again.";
-  } finally {
-    loading.value = false;
+//       setTimeout(() => {
+//         router.push("/");
+//       }, 1500);
+//     } else {
+//       errorMessage.value = error.value?.message || "Invalid credentials";
+//     }
+//   } catch (err) {
+//     errorMessage.value = "Login failed. Please try again.";
+//   } finally {
+//     loading.value = false;
+//   }
+// };
+
+
+const oauthLogin = async () => {
+    const { data, error } = await useFetch(`api/auth/oauth?provider=google`);
+
+    if (error.value) {
+    alert("OAuth Error: " + error.value.message);
+    return;
   }
-};
 
-// Function to handle OAuth login
-const oauthLogin = async (provider) => {
-  try {
-    const { data, error } = await useFetch(`/auth/oauth?provider=${provider}`);
-
-    if (data.value?.authorization_url) {
-      window.location.href = data.value.authorization_url;
-    } else {
-      errorMessage.value = "OAuth login failed. Try again.";
-    }
-  } catch {
-    errorMessage.value = "OAuth login error.";
-  }
+  window.location.href = data.value.url;
 };
 </script>
 

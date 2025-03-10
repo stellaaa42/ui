@@ -1,9 +1,8 @@
 <template>
   <div>
     <header>
-      <h1>default Service</h1>
+      <Navbar />
     </header>
-    <Navbar />
   </div>
   <div>
       <slot/>
