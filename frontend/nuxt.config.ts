@@ -1,11 +1,10 @@
+// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   runtimeConfig: {
     public: {
-      apiBase: "http://localhost:8000/api", // ✅ Change this for production
-    },
+      apiBase: 'http://localhost:8000/api'
+    }
   },
-  modules: [],
-  css: [],
-  build: {},
-  compatibilityDate: "2025-02-22",
+  compatibilityDate: '2024-11-01',
+  devtools: { enabled: true }
 });

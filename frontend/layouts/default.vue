@@ -4,8 +4,10 @@
       <h1>default Service</h1>
     </header>
     <Navbar />
-    <NuxtPage />
   </div>
+  <div>
+      <slot/>
+    </div>
 </template>
 
 <style scoped>

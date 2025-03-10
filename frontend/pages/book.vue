@@ -82,9 +82,12 @@
   loading.value = true;
   errorMessage.value = "";
 
-  const { data, error } = await useFetch("/items", {
+  const { data, error } = await useFetch("/services", {
     baseURL: config.public.apiBase, // ✅ Uses the correct backend API
   });
+
+  console.log("Response status:", status.value);
+  console.log("Data:", data.value);
 
   if (error.value) {
     errorMessage.value = "Failed to load services.";

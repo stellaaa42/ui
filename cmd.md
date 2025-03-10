@@ -23,20 +23,27 @@ curl -X POST http://127.0.0.1:8000/api/book/ -H "Content-Type: application/json"
 env:
     source env/bin/activate
 npm:
-    npm run dev
     rm -rf .nuxt node_modules package-lock.json
+    npx nuxi prepare
+    npx nuxi cleanup
+    ls -la .nuxt
+    npm install
+    npm run dev --verbose
 django:
-    python manage.py runserver
-    python manage.py showmigrations
     rm -rf api/migrations/__pycache__
     rm -rf api/migrations/00*.py
-    python manage.py migrate auth zero
     touch api/migrations/__init__.py
 
-    python manage.py makemigrations
+    python manage.py flush
+    python manage.py migrate auth zero
+    
+    python manage.py showmigrations
+    python manage.py makemigrations api
     python migrate
-sqlite3 shell:
+    python manage.py runserver --verbose
+sqlite3:
     rm db.sqlite3
+    sqlite3 shell
     sqlite3 db.sqlite3
     .tables
     SELECT * FROM api_item;

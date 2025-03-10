@@ -4,7 +4,7 @@ import django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "backend.settings")
 django.setup()
 
-from api.models import Area, Item
+from api.models import Area, Service
 
 def load_areas():
     """Load predefined areas into the database."""
@@ -21,12 +21,8 @@ def load_areas():
         else:
             print(f"⚠️ Already exists: {obj.name}")
 
-    print("\n📌 All areas in the database:")
-    for area in Area.objects.all():
-        print(f"- {area.name}: {area.description}")
-
 def load_services():
-    """Load predefined services (items) into the database."""
+    """Load predefined services into the database."""
     services_to_create = [
         {"name": "Standard", "price_per_hour": 39},
         {"name": "Premium", "price_per_hour": 50},
@@ -34,7 +30,7 @@ def load_services():
     ]
 
     for service_data in services_to_create:
-        obj, created = Item.objects.get_or_create(name=service_data["name"], defaults={"price_per_hour": service_data["price_per_hour"]})
+        obj, created = Service.objects.get_or_create(name=service_data["name"], defaults={"price_per_hour": service_data["price_per_hour"]})
         if created:
             print(f"✅ Created Service: {obj.name} - ${obj.price_per_hour}")
         else:

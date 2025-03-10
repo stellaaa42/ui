@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 
-class Item(models.Model):
+class Service(models.Model):
     name = models.CharField(max_length=50)
     description = models.TextField(blank=True)
     price_per_hour = models.DecimalField(max_digits=6, decimal_places=2, default=35.00)
@@ -31,12 +31,12 @@ class Booking(models.Model):
     appointment_date = models.DateField(blank=True, null=True)
     appointment_time = models.TimeField(blank=True, null=True)
 
-    service = models.ForeignKey('Item', on_delete=models.CASCADE)
-    area = models.ForeignKey('Area', on_delete=models.CASCADE)
+    service = models.ForeignKey('Service', on_delete=models.CASCADE, default=1)
+    area = models.ForeignKey('Area', on_delete=models.CASCADE, default=1)
 
     message = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)  # ✅ FIXED
+    # user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
 
     # Stripe Payment Intent ID
     # payment_intent_id = models.CharField(max_length=255, blank=True, null=True)  
@@ -55,4 +55,4 @@ class CustomUser(AbstractUser):
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
-        return self.username
+        return f"{self.username} ({self.email})"

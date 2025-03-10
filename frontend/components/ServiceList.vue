@@ -27,19 +27,27 @@
       loading.value = true;
       errorMessage.value = "";
 
-      const { data, error } = await useFetch("/items", {
-        baseURL: config.public.apiBase, // ✅ Ensures correct backend URL
-      });
+      try {
+        const { data, error } = await useFetch("/services", {
+          method: "GET",
+          baseURL: config.public.apiBase, 
+        });
 
-      if (error.value) {
-        errorMessage.value = "Error fetching services.";
-        console.error("Error fetching services:", error.value);
-      } else {
-        console.log("servicelist", data.value);
-        services.value = data.value;
+        console.log("🌍 API Base URL:", config.public.apiBase);
+
+        if (error.value) {
+          errorMessage.value = `Error fetching services: ${error.value.message || "Unknown error"}`;
+          console.error("🚨 Fetch error:", error.value);
+        } else {
+          console.log("📦 Service List:", data.value);
+          services.value = data.value || []; // Ensure it's always an array
+        }
+      } catch (err) {
+        errorMessage.value = "Unexpected error fetching services.";
+        console.error("🔥 Unexpected error:", err);
+      } finally {
+        loading.value = false;
       }
-
-      loading.value = false;
     };
 
     // ✅ Fetch services when component is mounted

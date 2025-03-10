@@ -8,16 +8,13 @@
       <p>Total Orders: {{ dashboardStats?.totalOrders }}</p>
       <p>Pending Messages: {{ dashboardStats?.pendingMessages }}</p>
       <p>Notifications: {{ dashboardStats?.notifications }}</p>
-  
-      <button @click="$auth.logout()">Logout</button>
+
     </div>
   </template>
   
   <script setup>
   import { ref, onMounted } from "vue";
-  import { useFetch, useNuxtApp } from "#app";
-  
-  const { $auth } = useNuxtApp();
+
   const user = ref(null);
   const dashboardStats = ref(null);
   

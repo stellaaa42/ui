@@ -1,16 +1,15 @@
 import stripe
 from rest_framework import serializers
 from django.conf import settings
-from .models import Booking, Item, Area
+from .models import Booking, Service, Area
 from datetime import date, datetime
 import re
 
 # stripe.api_key = settings.STRIPE_SECRET_KEY
 
-
-class ItemSerializer(serializers.ModelSerializer):
+class ServiceSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Item
+        model = Service
         fields = '__all__'
 
 class AreaSerializer(serializers.ModelSerializer):
@@ -19,7 +18,8 @@ class AreaSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class BookingSerializer(serializers.ModelSerializer):
-    service = serializers.PrimaryKeyRelatedField(queryset=Item.objects.all()) 
+    service = serializers.PrimaryKeyRelatedField(queryset=Service.objects.all())
+    area = serializers.PrimaryKeyRelatedField(queryset=Area.objects.all()) 
     # payment_intent_id = serializers.CharField(read_only=True)
     
     class Meta:
@@ -50,7 +50,7 @@ class BookingSerializer(serializers.ModelSerializer):
 
         return data
     
-        # def create(self, validated_data):
+    # def create(self, validated_data):
         # Create a Stripe Payment Intent (Only Authorize, Not Charge)
         # payment_intent = stripe.PaymentIntent.create(
         #     amount=5000,  # Example: $50.00 (Stripe uses cents)

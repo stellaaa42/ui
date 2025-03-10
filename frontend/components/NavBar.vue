@@ -18,10 +18,10 @@
         </div>
 
         <div v-if="activeTab === 'login'">
-          <LoginForm @loginSuccess="handleAuthSuccess" />
+          <button @click="navigateTo('/login')">Login</button>
         </div>
         <div v-if="activeTab === 'signup'">
-          <SignupForm @signupSuccess="handleAuthSuccess" />
+          <button @click="navigateTo('/signup')">Signup</button>
         </div>
       </div>
     </div>
@@ -30,21 +30,22 @@
 
 <script setup>
 import { ref } from "vue";
-import { useNuxtApp } from "#app";
-import LoginForm from "@/components/LoginForm.vue";
-import SignupForm from "@/components/SignupForm.vue";
+import { useState } from "#imports";
+import { navigateTo } from "#app";
 
-const { $auth } = useNuxtApp();
-const isAuthenticated = ref($auth.isAuthenticated);
+const isAuthenticated = useState("isAuthenticated", () => false);
 const showAuthModal = ref(false);
 const activeTab = ref("login"); // Default to Login tab
 
 const logout = () => {
-  $auth.logout();
+  isAuthenticated.value = false; // Simulate logout
+  console.log("User logged out!");
 };
 
 const handleAuthSuccess = () => {
-  showAuthModal.value = false; // Close modal after successful login/signup
+  isAuthenticated.value = true; // Simulate successful login
+  showAuthModal.value = false; // Close modal
+  console.log("User logged in!");
 };
 </script>
 
