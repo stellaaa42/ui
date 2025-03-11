@@ -1,8 +1,7 @@
 <template>
     <div class="service-list">
-      <h2>Our Services</h2>
+      <h2>Our Services</h2><br>
       <p v-if="loading">Loading services...</p>
-      <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
   
       <ul v-if="services.length">
         <li v-for="service in services" :key="service.id">
@@ -40,7 +39,7 @@
         console.log("🌍 API Base URL:", config.public.apiBase);
 
         if (error.value) {
-          errorMessage.value = `Error fetching services: ${error.value.message || "Unknown error"}`;
+          errorMessage.value = `No services`;
           console.error("🚨 Fetch error:", error.value);
         } else {
           console.log("📦 Service List:", data.value);

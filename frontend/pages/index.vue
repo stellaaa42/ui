@@ -13,14 +13,54 @@
     <section class="services">
       <ServiceList />
     </section>
-    <div>
-      newsletter email <input type="text">
-    </div>
+    <div class="newsletter-container">
+      <div class="newsletter-box">
+        <h2 class="newsletter-title">Subscribe to Our Newsletter</h2>
+        <p class="newsletter-text">Stay updated with our latest news and offers.</p>
+
+        <form @submit.prevent="subscribe" class="newsletter-form">
+          <input
+            v-model="email"
+            type="email"
+            placeholder="Enter your email"
+            class="newsletter-input"
+            required
+          />
+          <button type="submit" class="newsletter-button">Subscribe</button>
+        </form>
+
+        <p v-if="message" class="newsletter-message">{{ message }}</p>
+      </div>
+  </div>
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref } from "vue";
+
+const email = ref("");
+const message = ref("");
+
+const subscribe = () => {
+  if (!email.value.includes("@")) {
+    message.value = "Please enter a valid email address!";
+    return;
+  }
+  // Simulate subscription action (replace with actual API call)
+  setTimeout(() => {
+    message.value = "Thank you for subscribing!";
+    email.value = "";
+  }, 1000);
+};
 </script>
+
+<style scoped>
+/* Add any additional styling if needed */
+</style>
+
+
+
+
 
 <style scoped>
 .hero {
@@ -136,5 +176,80 @@ h2 {
   font-size: 20px;
   font-weight: bold;
   color: #0056ff;
+}
+
+.newsletter-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 20vh;
+  background: linear-gradient(to right, #1a1a2e, #16213e);
+  padding: 40px 20px;
+}
+
+/* 📨 Box Styling */
+.newsletter-box {
+  background: #222;
+  color: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  max-width: 400px;
+  text-align: center;
+}
+
+/* 🏆 Title & Text */
+.newsletter-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.newsletter-text {
+  font-size: 14px;
+  color: #b0b0b0;
+  margin-bottom: 20px;
+}
+
+/* ✍️ Input Field */
+.newsletter-input {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #444;
+  border-radius: 8px;
+  outline: none;
+  background: #333;
+  color: white;
+  margin-bottom: 10px;
+}
+
+.newsletter-input::placeholder {
+  color: #aaa;
+}
+
+/* 🔘 Subscribe Button */
+.newsletter-button {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.newsletter-button:hover {
+  background: #0056b3;
+}
+
+/* ✅ Subscription Message */
+.newsletter-message {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #28a745;
 }
 </style>
