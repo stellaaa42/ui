@@ -35,34 +35,37 @@ const successMessage = ref("");
 const errorMessage = ref("");
 const loading = ref(false);
 
-// Function to login user
-// const login = async () => {
-//   errorMessage.value = "";
-//   successMessage.value = "";
-//   loading.value = true;
+const login = async () => {
+  errorMessage.value = "";
+  successMessage.value = "";
+  loading.value = true;
 
-//   try {
-//     const { data, error } = await useFetch("/auth/login", {
-//       method: "POST",
-//       body: { username: username.value, password: password.value },
-//     });
+  try {
+    const data = await $fetch("/api/auth/login", {
+      method: "POST",
+      body: { username: username.value, password: password.value },
+    });
+    console.log("Login response:", data);
 
-//     if (data.value?.access) {
-//       successMessage.value = "Login successful! Redirecting...";
-//       useCookie("user").value = data.value.user; // Store user in a cookie
+    if (data) {
+      successMessage.value = "Login successful! Redirecting...";
+      useCookie("user").value = data.user; 
+      useCookie("access_token").value = data.token;
+      
+      setTimeout(() => {
+        router.push("/dashboard");
+      }, 1500);
+    } else {
+      errorMessage.value = "Invalid credentials"; 
+    }
+  } catch (err) {
+    console.error("Login error:", err);
+    errorMessage.value = err?.message || "Login failed. Please try again.";
+  } finally {
+    loading.value = false;
+  }
+};
 
-//       setTimeout(() => {
-//         router.push("/");
-//       }, 1500);
-//     } else {
-//       errorMessage.value = error.value?.message || "Invalid credentials";
-//     }
-//   } catch (err) {
-//     errorMessage.value = "Login failed. Please try again.";
-//   } finally {
-//     loading.value = false;
-//   }
-// };
 
 
 const oauthLogin = async () => {

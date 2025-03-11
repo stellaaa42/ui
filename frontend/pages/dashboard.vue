@@ -19,13 +19,17 @@
   const dashboardStats = ref(null);
   
   onMounted(async () => {
-    const { data, error } = await useFetch("/dashboard");
-    if (data.value) {
-      user.value = data.value.user;
-      dashboardStats.value = data.value.dashboardStats;
+  try {
+    const data = await $fetch("/dashboard"); 
+    if (data) {
+      user.value = data.user;
+      dashboardStats.value = data.dashboardStats;
     } else {
-      console.error("❌ API Error:", error.value);
+      console.error("❌ No data received from /dashboard", error.value);
     }
+  } catch (error) {
+    console.error("❌ API Error:", error);
+  }
   });
   </script>
   

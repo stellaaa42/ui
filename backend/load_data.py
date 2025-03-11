@@ -4,7 +4,7 @@ import django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "backend.settings")
 django.setup()
 
-from api.models import Area, Service
+from api.models import Area, Service, CustomUser
 
 def load_areas():
     """Load predefined areas into the database."""
@@ -36,6 +36,32 @@ def load_services():
         else:
             print(f"⚠️ Service Already Exists: {obj.name}")
 
+def load_users():
+    test_users = [
+        {"username": "testuser1", 
+        "password": "testpass123",
+        "email": "test1@example.com"},
+        {"username": "testuser2", 
+        "password": "supersecure456",
+        "email": "test2@example.com"},
+    ]
+
+    for user_data in test_users:
+        username = user_data["username"]
+        password = user_data["password"]
+        email = user_data["email"]
+
+        user, created = CustomUser.objects.get_or_create(username=username, defaults={"email": email} )
+        if created:
+            user.set_password(password)  # Set password properly (hashed)
+            user.save()
+            print(f"✅ Created user: {username} with password: {password}")
+        else:
+            print(f"⚠️ User {username} already exists!")
+
+    print("🚀 Test users loaded successfully!")
+
 if __name__ == "__main__":
-    load_areas()
-    load_services()
+    # load_areas()
+    # load_services()
+    load_users()

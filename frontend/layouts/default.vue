@@ -20,4 +20,8 @@ header {
 
 <script setup>
 import Navbar from "~/components/NavBar.vue";
+import { useCookie } from "#app";
+
+const token = useCookie("access_token");
+const isLoggedIn = computed(() => !!token.value);
 </script>

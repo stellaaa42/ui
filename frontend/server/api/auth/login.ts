@@ -1,31 +1,36 @@
-// import { defineEventHandler, readBody, setCookie } from 'h3';
+import { defineEventHandler, readBody, setCookie } from 'h3';
 
-// interface LoginResponse {
-//   access: string;
-//   user: { name: string };
-// }
+const config = useRuntimeConfig();
 
-// export default defineEventHandler(async (event) => {
-//   const body = await readBody(event);
+interface LoginResponse {
+  access: string;
+  user: { name: string };
+}
 
-//   try {
-//     const response = await $fetch<LoginResponse>('http://localhost:8000/api/login/', {
-//       method: 'POST',
-//       body,
-//     });
+export default defineEventHandler(async (event) => {
+  const body = await readBody(event);
 
-//     if (response?.access) {
-//       setCookie(event, 'access_token', response.access, {
-//         httpOnly: true,
-//         secure: false, // Change to `true` in production
-//         sameSite: 'lax',
-//       });
-//       return { user: response.user };
-//     }
+  try {
+    const response = await $fetch<LoginResponse>(`${config.public.apiBase}/auth/login/`, {
+      method: 'POST',
+      body: await readBody(event),
+    });
 
-//     return { error: 'Invalid credentials' };
-//   } catch (error) {
-//     console.error("Login request failed:", error);
-//     return { error: 'Failed to authenticate. Please check your credentials and try again.' };
-//   }
-// });
+    console.log("Login response:", response);
+    if (response?.access) {
+      setCookie(event, 'access_token', response.access, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: 'lax',
+        path: "/",
+        maxAge: 3600,
+      });
+      return { response };
+    }
+
+    return { error: 'Invalid credentials' };
+  } catch (error) {
+    console.error("Login request failed:", error);
+    return { error: 'Failed to authenticate. Please check your credentials and try again.' };
+  }
+});
