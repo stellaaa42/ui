@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'rest_framework_simplejwt',
+    # "rest_framework_simplejwt.token_blacklist",
     "rest_framework.authtoken", 
     'dj_rest_auth',
     'allauth',
@@ -118,6 +119,16 @@ REST_FRAMEWORK = {
     ),
 }
 
+# SIMPLE_JWT = {
+#     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),  # Short-lived access token
+#     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),  # Long-lived refresh token
+#     "ROTATE_REFRESH_TOKENS": True,
+#     "BLACKLIST_AFTER_ROTATION": True,  # Blacklist old refresh tokens
+#     # "ALGORITHM": "HS256",
+#     # "SIGNING_KEY": SECRET_KEY,
+#     "AUTH_HEADER_TYPES": ("Bearer",),
+# }
+
 ROOT_URLCONF = 'backend.urls'
 
 TEMPLATES = [
@@ -141,7 +152,6 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',

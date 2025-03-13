@@ -61,7 +61,42 @@ def load_users():
 
     print("🚀 Test users loaded successfully!")
 
+TEST_USER = {
+    "username": "testuser1",
+    "password": "testpass123"
+}
+
+def login_user():
+    LOGIN_URL = "http://127.0.0.1:8000/api/auth/login/"
+    response = requests.post(LOGIN_URL, json=TEST_USER)
+
+    if response.status_code == 200:
+        with open(COOKIE_FILE, "w") as file:
+            file.write(response.headers.get("Set-Cookie", ""))
+        print("✅ Logged in successfully.")
+    else:
+        print(f"❌ Login failed: {response.status_code} - {response.text}")
+
+def logout_user():
+    LOGOUT_URL = "http://127.0.0.1:8000/api/auth/logout/"
+    try:
+        with open(COOKIE_FILE, "r") as file:
+            cookies = file.read().strip()
+        headers = {"Cookie": cookies}
+    except FileNotFoundError:
+        print("❌ No cookie file found. Login first.")
+        return
+
+    response = requests.post(LOGOUT_URL, headers=headers)
+
+    if response.status_code in [200, 205]:
+        print("✅ Logged out successfully.")
+    else:
+        print(f"❌ Logout failed: {response.status_code} - {response.text}")
+
 if __name__ == "__main__":
     # load_areas()
     # load_services()
-    load_users()
+    # load_users()
+    # login_user()
+    logout_user()

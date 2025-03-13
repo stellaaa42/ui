@@ -40,10 +40,8 @@
 
 <script setup>
 import { ref } from "vue";
-import { useRouter } from "vue-router";
 import { useFetch } from "#app";
 
-const router = useRouter();
 const username = ref("");
 const email = ref("");
 const password = ref("");
@@ -79,7 +77,7 @@ const signup = async () => {
   loading.value = true;
 
   try {
-    const { data, error } = await useFetch("/auth/signup", {
+    const data = await fetch("/api/auth/signup", {
       method: "POST",
       body: {
         username: username.value,
@@ -87,15 +85,19 @@ const signup = async () => {
         password1: password.value,
         password2: confirmPassword.value,
       },
+      // credentials: "include",
     });
-
-    if (error.value) {
+    console.log("signup.vue response:", data);
+    if (data) {
+      console.log("User:", data.user);
+      successMessage.value = "Signup successful! Redirecting to login...";
+      setTimeout(() => {
+      navigateTo("/login");
+      }, 1000);
+    } else {
       errorMessage.value = error.value.data?.message || "Signup failed. Please try again.";
       return;
     }
-
-    successMessage.value = "Signup successful! Redirecting to login...";
-    setTimeout(() => router.push("/login"), 2000);
   } catch (err) {
     errorMessage.value = "Unexpected error occurred.";
   } finally {

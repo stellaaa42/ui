@@ -52,10 +52,9 @@
   
   <script setup>
   import { ref, onMounted } from 'vue';
-  import { useFetch, useRuntimeConfig, useRouter } from "#app";
+  import { useFetch, useRuntimeConfig } from "#app";
 
   const config = useRuntimeConfig();
-  const router = useRouter();
 
   const services = ref([]);
   const areas = ref([]);
@@ -137,7 +136,7 @@
       console.error("Booking error:", error.value);
     } else {
       console.log("Booking successful:", data.value);
-      router.push("/"); // ✅ Redirect to home after booking
+      navigateTo("/"); // ✅ Redirect to home after booking
     }
 
     loading.value = false;

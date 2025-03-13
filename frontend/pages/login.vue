@@ -26,9 +26,8 @@
 
 <script setup>
 import { ref } from "vue";
-import { useFetch, useRouter, useCookie } from "#app";
+import { useFetch } from "#app";
 
-const router = useRouter();
 const username = ref("");
 const password = ref("");
 const successMessage = ref("");
@@ -44,19 +43,21 @@ const login = async () => {
     const data = await $fetch("/api/auth/login", {
       method: "POST",
       body: { username: username.value, password: password.value },
+      credentials: "include", 
     });
-    console.log("Login response:", data);
+    console.log("login.vue response:", data);
 
     if (data) {
-      successMessage.value = "Login successful! Redirecting...";
-      useCookie("user").value = data.user; 
-      useCookie("access_token").value = data.token;
-      
+      successMessage.value = "Login successful!";
+      console.log("User:", data.user);
+      console.log("login.vue Token:", data.token);
+
       setTimeout(() => {
-        router.push("/dashboard");
-      }, 1500);
+        navigateTo("/dashboard");
+    }, 1000);
+
     } else {
-      errorMessage.value = "Invalid credentials"; 
+      errorMessage.value = "Your password or username is incorrect."; 
     }
   } catch (err) {
     console.error("Login error:", err);

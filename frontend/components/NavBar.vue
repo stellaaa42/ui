@@ -6,8 +6,12 @@
     <NuxtLink to="/about" class="nav-tab">About Us</NuxtLink>
 
     <div class="nav-actions">
-      <button v-if="isAuthenticated" @click="logout">Logout</button>
-      <NuxtLink v-else to="/login" class="auth-button">Signup / Login</NuxtLink>
+      <template v-if="isAuthenticated">
+      <button @click="logout">Logout</button>
+      </template>
+      <template v-else>
+        <NuxtLink to="/login" class="auth-button">Signup / Login</NuxtLink>
+      </template>
     </div>
 
 
@@ -15,17 +19,18 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-import { useState } from "#imports";
-import { navigateTo } from "#app";
+import { computed } from "vue";
+import { useCookie, navigateTo } from "#app";
 
-const isAuthenticated = useState("isAuthenticated", () => false);
+const authToken = useCookie("access_token"); 
+const isAuthenticated = computed(() => !!authToken.value); // True if token exists
 
 const logout = () => {
-  isAuthenticated.value = false; // Simulate logout
-  console.log("User logged out!");
+  authToken.value = null; // 
+  useCookie("user").value = null;
+  console.log("You logged out!");
+  navigateTo("/"); 
 };
-
 </script>
 
 <style scoped>

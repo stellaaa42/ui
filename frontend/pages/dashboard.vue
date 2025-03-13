@@ -17,10 +17,25 @@
 
   const user = ref(null);
   const dashboardStats = ref(null);
+  const token = useState("authToken");
+  console.log("Dashboard.vue token:", token);
+
+  definePageMeta({
+    middleware: "auth",
+  });
   
   onMounted(async () => {
   try {
-    const data = await $fetch("/dashboard"); 
+    const data = await $fetch("/api/dashboard", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token.value}`,
+      },
+      // credentials: "include",
+    });
+
+    console.log("Dashboard.vue data:", data);
+    
     if (data) {
       user.value = data.user;
       dashboardStats.value = data.dashboardStats;

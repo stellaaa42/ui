@@ -3,7 +3,7 @@ import { defineEventHandler, readBody, setCookie } from 'h3';
 const config = useRuntimeConfig();
 
 interface LoginResponse {
-  access: string;
+  access_token: string;
   user: { name: string };
 }
 
@@ -16,21 +16,28 @@ export default defineEventHandler(async (event) => {
       body: await readBody(event),
     });
 
-    console.log("Login response:", response);
-    if (response?.access) {
-      setCookie(event, 'access_token', response.access, {
-        httpOnly: true,
+    console.log("login.ts response:", response);
+    
+    if (response?.access_token) {
+      setCookie(event, 'token', response.access_token, {
+        httpOnly: false,
+        // httpOnly: true, // for production
         secure: process.env.NODE_ENV === "production",
-        sameSite: 'lax',
+        // sameSite: 'lax', // for production
+        sameSite: 'None' as any,
         path: "/",
-        maxAge: 3600,
+        // maxAge: 3600, // 1 hour
+        maxAge: 300, // 5 minutes
       });
-      return { response };
+      console.log("🍪 Setting access token in cookie:", response.access_token);
+      // console.log('event', event);
+      return { success: true, user: response.user, token: response.access_token };
     }
 
-    return { error: 'Invalid credentials' };
+    console.error("No response:", response);
+    return { success: false, error: "No response." };
   } catch (error) {
     console.error("Login request failed:", error);
-    return { error: 'Failed to authenticate. Please check your credentials and try again.' };
+    return { error: 'Your usename or password might not be correct' };
   }
 });

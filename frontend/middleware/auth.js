@@ -1,13 +1,15 @@
-// export default defineNuxtRouteMiddleware((to, from) => {
-//   const accessToken = useCookie("access_token"); 
+export default defineNuxtRouteMiddleware((to, from) => {
+  if (process.client) return
 
-//   console.log("🚀 Navigating to:", to.path);
-//   console.log("🔑 Access Token:", accessToken.value ? "✅ Exists" : "❌ Missing");
+  const token = useCookie("token"); 
 
-//   if (!accessToken.value && to.path !== "/") {
-//     console.warn("⛔ No token! Redirecting to /");
-//     return navigateTo("/");
-//   }
+  if (token.value && to.path === "/login") {
+    console.log("Redirecting to /dashboard");
+    return navigateTo("/dashboard");
+  } else {
+    console.log("Navigating to:", to.path);
+    navigateTo("/");
+  }
 
-//   console.log("✅ Allowed: Proceeding to", to.path);
-// });
+  console.log("✅ Allowed: Proceeding to", to.path);
+});

@@ -3,7 +3,7 @@ from .views import (
     ServiceListView, AreaListView, BookingCreateView, BookingListView, get_csrf_token,
 )
 from .auth_views import (
-    SignupView, LoginView, LogoutView, RefreshTokenView
+    SignupView, LoginView, LogoutView
 )
 
 urlpatterns = [
@@ -17,8 +17,7 @@ urlpatterns = [
     path("auth/", include([
             path("signup/", SignupView.as_view(), name="signup"),
             path("login/", LoginView.as_view(), name="login"),
-            path("logout/", LogoutView.as_view(), name="logout"),
-            # path("refresh/", RefreshTokenView.as_view(), name="refresh-token"),
             path('oauth/', include('allauth.socialaccount.urls')),
+            path("logout/", LogoutView.as_view(), name="logout"),
         ])),
 ]

@@ -1,28 +1,16 @@
 import { defineEventHandler, getCookie } from "h3";
 
+
 export default defineEventHandler(async (event) => {
-  console.log("📩 API Hit: /api/dashboard");
+  const token = getCookie(event, "token");
+  const sessionid = getCookie(event, "sessionid");
+  console.log("🔍 dashboard.ts parse Cookies in API Request:", parseCookies(event));
+  console.log('dashboard.ts sessionid', sessionid);
 
-  const accessToken = getCookie(event, "access_token");
-
-  if (!accessToken) {
-    console.warn("⛔ No token! Unauthorized request.");
+  if (!token) {
+    console.warn("dashboard.ts No token!");
     throw createError({ statusCode: 401, message: "Unauthorized" });
   }
 
-  console.log("✅ Token found! Fetching dashboard data...");
-
-  // Simulating user data (Replace this with an actual database/API call)
-  return {
-    user: {
-      name: "John Doe",
-      email: "johndoe@example.com",
-      role: "Admin",
-    },
-    dashboardStats: {
-      totalOrders: 42,
-      pendingMessages: 3,
-      notifications: 5,
-    },
-  };
+  return { success: true, sessionid };
 });

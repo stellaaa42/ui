@@ -26,29 +26,18 @@
       loading.value = true;
       errorMessage.value = "";
 
-      // const response = await fetch(`${config.public.apiBase}/services`);
-      // const json = await response.json();
-      // console.log("🔥 RAW FETCH RESPONSE:", json);
-      await new Promise(resolve => setTimeout(resolve, 1000));
       try {
-        const { data, error } = await useFetch("/services", {
+        const data = await $fetch("/services", {
           method: "GET",
           baseURL: config.public.apiBase, 
         });
 
-        console.log("🌍 API Base URL:", config.public.apiBase);
-
-        if (error.value) {
-          errorMessage.value = `No services`;
-          console.error("🚨 Fetch error:", error.value);
-        } else {
-          console.log("📦 Service List:", data.value);
-          console.log("stringify List:", JSON.stringify(data.value, null, 2));
-          services.value = data.value || []; // Ensure it's always an array
-        }
+        // console.log("🌍 API Base URL:", config.public.apiBase);
+        // console.log("stringify List:", JSON.stringify(data, null, 2));
+        services.value = data || [];
       } catch (err) {
-        errorMessage.value = "Unexpected error fetching services.";
-        console.error("🔥 Unexpected error:", err);
+        errorMessage.value = "Error fetching services.";
+        console.error("Error:", err);
       } finally {
         loading.value = false;
       }
