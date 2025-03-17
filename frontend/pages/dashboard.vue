@@ -1,5 +1,5 @@
 <template>
-    <div class="dashboard-container">
+    <div v-if="user" class="dashboard-container">
       <h1>Welcome, {{ user?.name || "User" }}!</h1>
       <p>Email: {{ user?.email }}</p>
       <p>Role: {{ user?.role }}</p>
@@ -8,17 +8,20 @@
       <p>Total Orders: {{ dashboardStats?.totalOrders }}</p>
       <p>Pending Messages: {{ dashboardStats?.pendingMessages }}</p>
       <p>Notifications: {{ dashboardStats?.notifications }}</p>
-
+    </div>
+    <div v-else>
+    <p>NO USER, Loading dashboard...</p>
     </div>
   </template>
   
   <script setup>
   import { ref, onMounted } from "vue";
 
-  const user = ref(null);
   const dashboardStats = ref(null);
-  const token = useState("authToken");
-  console.log("Dashboard.vue token:", token);
+  const token = useCookie("token"); 
+  console.log("Dashboard.vue token:", token.value);
+  const user = useCookie("user");
+  console.log("Dashboard.vue user:", user.value);
 
   definePageMeta({
     middleware: "auth",
@@ -29,21 +32,20 @@
     const data = await $fetch("/api/dashboard", {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${token.value}`,
-      },
+         Authorization: `Bearer ${token.value}`,
+       },
       // credentials: "include",
     });
 
-    console.log("Dashboard.vue data:", data);
     
     if (data) {
-      user.value = data.user;
+      console.log("Dashboard.vue data:", data);
       dashboardStats.value = data.dashboardStats;
     } else {
-      console.error("❌ No data received from /dashboard", error.value);
+      console.error("❌ No data received from /dashboard.ts", error);
     }
   } catch (error) {
-    console.error("❌ API Error:", error);
+    console.error("❌ Dashboard.vue error");
   }
   });
   </script>

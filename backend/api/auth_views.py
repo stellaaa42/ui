@@ -6,6 +6,9 @@ from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.contrib.auth.hashers import make_password
+from django.contrib.sessions.models import Session
+from django.utils import timezone
+from django.views import View
 
 User = get_user_model()
 
@@ -49,3 +52,38 @@ class LogoutView(APIView):
         response = Response({"message": "Logged out"}, status=205)
         response.delete_cookie("access_token")  # Just removes the cookie
         return response
+
+class UserInfoView(View):
+    def get_user_from_session(self, session_key):
+        try:
+            session = Session.objects.get(
+                session_key=session_key,
+                expire_date__gte=timezone.now()
+            )
+            session_data = session.get_decoded()
+            user_id = session_data.get('_auth_user_id')
+            if not user_id:
+                return None
+
+            user = User.objects.get(pk=user_id)
+            return {
+                'username': user.username,
+                'email': user.email,
+                # Add any more fields you crave
+            }
+        except Session.DoesNotExist:
+            return None
+
+    def post(self, request):
+        session_key = request.POST.get('token')
+        print('session key', session_key)
+        if not session_key:
+            return JsonResponse(
+                {'error': 'Session key not provided'}, status=400
+            )
+
+        user_data = self.get_user_from_session(session_key)
+
+        if not user_data:
+            return JsonResponse({"error": "userinfo auth_view post, invalid or expired session"}, status=401)
+        return JsonResponse({'user': user_data}, status=200)

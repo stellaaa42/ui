@@ -1,12 +1,13 @@
+curl -X POST \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQyMjE2MDI3LCJpYXQiOjE3NDIyMTU3MjcsImp0aSI6Ijg0Yzg0NTcyM2NhYjQxOTliYTcyYmI1ZDI3N2FiYjMyIiwidXNlcl9pZCI6MX0.hSXorscsoKUdX21hBSJHNlo0GWpbUNXsVprslrEBL2s" \
+  -d '{ "action": "logout" }' \
+  http://localhost:3000/api/auth/logout
+  
 curl -X POST http://localhost:8000/api/login/ \
   -H "Content-Type: application/json" \
   -d '{"username": "test1", "password": "your_password"}' \
   -c cookies.txt -v
-
-python manage.py shell:
-    from api.models import Area
-    print(Area.objects.all().values())
-    Area.objects.create(name="One room", description="Small area, 20 sqm")
 
 curl -X POST http://127.0.0.1:8000/api/book/ -H "Content-Type: application/json" \
     -d'{
@@ -19,15 +20,15 @@ curl -X POST http://127.0.0.1:8000/api/book/ -H "Content-Type: application/json"
         "appointment_time": "14:00",
         "payment_method": "paypal"
     }'
-
 env:
     source env/bin/activate
+
 npm:
     rm -rf .nuxt node_modules package-lock.json
-    npx nuxi prepare
     npx nuxi cleanup
-    ls -la .nuxt
     npm install
+    ls -la .nuxt
+    npx nuxi prepare
     npm run dev --verbose
 django:
     rm -rf api/migrations/__pycache__
@@ -49,6 +50,11 @@ sqlite3:
     SELECT * FROM api_item;
     .exit
     cp db.sqlite3 db_backup.sqlite3
+
+python manage.py shell:
+    from api.models import Area
+    print(Area.objects.all().values())
+    Area.objects.create(name="One room", description="Small area, 20 sqm")
 
 
 

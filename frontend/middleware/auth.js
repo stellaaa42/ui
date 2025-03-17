@@ -1,15 +1,17 @@
 export default defineNuxtRouteMiddleware((to, from) => {
-  if (process.client) return
+  if (!process.client) return
 
-  const token = useCookie("token"); 
+  const token = useCookie("token").value;
+  const user = useCookie("user").value;
 
-  if (token.value && to.path === "/login") {
-    console.log("Redirecting to /dashboard");
-    return navigateTo("/dashboard");
+  if (!token || !user) {
+    console.log("auth.js no token/user, navigating to /");
+    return navigateTo("/");
   } else {
+    console.log("auth.js token:", token);
+    console.log("auth.js user:", user);
     console.log("Navigating to:", to.path);
-    navigateTo("/");
+    navigateTo("/dashboard");
+    return;
   }
-
-  console.log("✅ Allowed: Proceeding to", to.path);
 });

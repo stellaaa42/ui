@@ -1,9 +1,10 @@
 from django.urls import path, include
 from .views import (
-    ServiceListView, AreaListView, BookingCreateView, BookingListView, get_csrf_token,
+    ServiceListView, AreaListView, BookingCreateView, 
+    BookingListView, get_csrf_token,
 )
 from .auth_views import (
-    SignupView, LoginView, LogoutView
+    SignupView, LoginView, LogoutView, UserInfoView
 )
 
 urlpatterns = [
@@ -19,5 +20,6 @@ urlpatterns = [
             path("login/", LoginView.as_view(), name="login"),
             path('oauth/', include('allauth.socialaccount.urls')),
             path("logout/", LogoutView.as_view(), name="logout"),
+            path('user-info/', UserInfoView.as_view(), name='user_info'),
         ])),
 ]

@@ -22,14 +22,15 @@
 import { computed } from "vue";
 import { useCookie, navigateTo } from "#app";
 
-const authToken = useCookie("access_token"); 
-const isAuthenticated = computed(() => !!authToken.value); // True if token exists
+const token = useCookie("token"); 
+if (token.value) {
+  console.log("NavBar.vue token:", token.value);
+}
+const isAuthenticated = computed(() => !!token.value); // True if token exists
 
 const logout = () => {
-  authToken.value = null; // 
-  useCookie("user").value = null;
-  console.log("You logged out!");
-  navigateTo("/"); 
+  token.value = null;
+  navigateTo("/logout"); 
 };
 </script>
 

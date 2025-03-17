@@ -45,17 +45,19 @@ const login = async () => {
       body: { username: username.value, password: password.value },
       credentials: "include", 
     });
-    console.log("login.vue response:", data);
+    console.log("login.vue data:", data);
 
     if (data) {
       successMessage.value = "Login successful!";
-      console.log("User:", data.user);
-      console.log("login.vue Token:", data.token);
+
+      console.log("login.vue useCookie user data:", data.user);
+      console.log("login.vue useCookie token:", data.token);
+      useCookie("user").value = data.user; 
+      useCookie("token").value = data.token;
 
       setTimeout(() => {
         navigateTo("/dashboard");
-    }, 1000);
-
+      }, 1000);
     } else {
       errorMessage.value = "Your password or username is incorrect."; 
     }

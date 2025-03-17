@@ -5,11 +5,10 @@ const config = useRuntimeConfig();
 interface LoginResponse {
   access_token: string;
   user: { name: string };
+  csrf_token: string;
 }
 
 export default defineEventHandler(async (event) => {
-  const body = await readBody(event);
-
   try {
     const response = await $fetch<LoginResponse>(`${config.public.apiBase}/auth/login/`, {
       method: 'POST',
@@ -29,9 +28,10 @@ export default defineEventHandler(async (event) => {
         // maxAge: 3600, // 1 hour
         maxAge: 300, // 5 minutes
       });
-      console.log("🍪 Setting access token in cookie:", response.access_token);
-      // console.log('event', event);
-      return { success: true, user: response.user, token: response.access_token };
+      // console.log('login.ts event', event); 
+
+      console.log("login.ts access_token", response.user, response.access_token);
+      return { success: true, user: response.user, token: response.access_token};
     }
 
     console.error("No response:", response);
