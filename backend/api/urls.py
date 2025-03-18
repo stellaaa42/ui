@@ -1,10 +1,11 @@
 from django.urls import path, include
 from .views import (
     ServiceListView, AreaListView, BookingCreateView, 
-    BookingListView, get_csrf_token,
+    BookingListView,
 )
 from .auth_views import (
-    SignupView, LoginView, LogoutView, UserInfoView
+    SignupView, LogoutView, UserInfoView, LoginView,
+    RefreshTokenView,
 )
 
 urlpatterns = [
@@ -13,13 +14,13 @@ urlpatterns = [
     path('bookings/create', BookingCreateView.as_view(), name='book-create'),
     path('bookings/', BookingListView.as_view(), name='bookings-list'),
 
-    path('csrf/', get_csrf_token),
-
     path("auth/", include([
             path("signup/", SignupView.as_view(), name="signup"),
-            path("login/", LoginView.as_view(), name="login"),
+            path('login/', LoginView.as_view(), name='login'),
+            path('api/auth/refresh/', RefreshTokenView.as_view(), name='token_refresh'),
             path('oauth/', include('allauth.socialaccount.urls')),
             path("logout/", LogoutView.as_view(), name="logout"),
             path('user-info/', UserInfoView.as_view(), name='user_info'),
+
         ])),
 ]

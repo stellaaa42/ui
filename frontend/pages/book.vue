@@ -51,8 +51,6 @@
   </template>
   
   <script setup>
-  import { ref, onMounted } from 'vue';
-  import { useFetch, useRuntimeConfig } from "#app";
 
   const config = useRuntimeConfig();
 

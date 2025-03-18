@@ -1,5 +1,4 @@
-import { defineEventHandler, getQuery, setCookie, createError } from "h3";
-import { useRuntimeConfig } from "#imports";
+import { createError } from "h3";
 
 // Define OAuth response types
 type TokenResponse = {

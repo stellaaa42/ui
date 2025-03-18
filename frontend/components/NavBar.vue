@@ -19,19 +19,29 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
-import { useCookie, navigateTo } from "#app";
+import { useAuth } from "@/composables/useAuth";
 
-const token = useCookie("token"); 
-if (token.value) {
-  console.log("NavBar.vue token:", token.value);
-}
-const isAuthenticated = computed(() => !!token.value); // True if token exists
+const { user, fetchUser } = useAuth();
+const isAuthenticated = computed(() => !!user.value); // True if token exists
 
-const logout = () => {
-  token.value = null;
-  navigateTo("/logout"); 
+const logout = async () => {
+  try {
+    await $fetch("/api/auth/logout", {
+      method: "POST",
+      credentials: "include", // ✅ Ensures cookies are cleared properly
+    });
+
+    user.value = null; // ✅ Clear user state
+    navigateTo("/"); // 
+  } catch (error) {
+    console.error("❌ Logout failed:", error);
+  }
 };
+
+onMounted(async () => {
+  await fetchUser(); // ✅ Load user data before showing UI
+});
+
 </script>
 
 <style scoped>

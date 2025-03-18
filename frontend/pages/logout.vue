@@ -1,8 +1,8 @@
 <script setup>
 const logout = async () => {
   try {
-    console.log('logout.vue user cookie:', useCookie("user").value);
-    useCookie("user").value = null;
+    // console.log('logout.vue user cookie:', useCookie("user").value);
+    // useCookie("user").value = null;
     await $fetch("/api/auth/logout", { method: "POST" });
     console.log("You logged out!");
     navigateTo("/"); 

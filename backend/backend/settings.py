@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+from datetime import timedelta
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -45,9 +47,10 @@ LOGGING = {
 
 ALLOWED_HOSTS = []
 
+REST_USE_JWT = True  # Tell dj-rest-auth to use JWT
+TOKEN_MODEL = None 
 
 # Application definition
-
 INSTALLED_APPS = [
     'api',
     'django.contrib.admin',
@@ -60,7 +63,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'rest_framework_simplejwt',
-    # "rest_framework_simplejwt.token_blacklist",
+    "rest_framework_simplejwt.token_blacklist",
     "rest_framework.authtoken", 
     'dj_rest_auth',
     'allauth',
@@ -96,7 +99,6 @@ CSRF_TRUSTED_ORIGINS = [
     "http://127.0.0.1:8000",
 ]
 
-
 AUTH_USER_MODEL = 'api.CustomUser'
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
@@ -111,23 +113,26 @@ CSRF_USE_SESSIONS = True  # Set to True if using session authentication
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-        "rest_framework.authentication.TokenAuthentication",
-        "rest_framework.authentication.SessionAuthentication",
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.AllowAny',
+        # 'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
     ),
 }
 
-# SIMPLE_JWT = {
-#     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),  # Short-lived access token
-#     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),  # Long-lived refresh token
-#     "ROTATE_REFRESH_TOKENS": True,
-#     "BLACKLIST_AFTER_ROTATION": True,  # Blacklist old refresh tokens
-#     # "ALGORITHM": "HS256",
-#     # "SIGNING_KEY": SECRET_KEY,
-#     "AUTH_HEADER_TYPES": ("Bearer",),
-# }
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=15),  # 15min Short-lived access token
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),  # Long-lived refresh token
+    "ROTATE_REFRESH_TOKENS": True,
+    "BLACKLIST_AFTER_ROTATION": True,  # Blacklist old refresh tokens
+    "ALGORITHM": "HS256",
+    "SIGNING_KEY": SECRET_KEY,
+    "AUTH_HEADER_TYPES": ("Bearer",),
+    "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
+}
 
 ROOT_URLCONF = 'backend.urls'
 

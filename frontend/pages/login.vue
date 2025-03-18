@@ -25,8 +25,6 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-import { useFetch } from "#app";
 
 const username = ref("");
 const password = ref("");
@@ -50,10 +48,7 @@ const login = async () => {
     if (data) {
       successMessage.value = "Login successful!";
 
-      console.log("login.vue useCookie user data:", data.user);
-      console.log("login.vue useCookie token:", data.token);
-      useCookie("user").value = data.user; 
-      useCookie("token").value = data.token;
+      useState("user").value = data.user;
 
       setTimeout(() => {
         navigateTo("/dashboard");
@@ -62,8 +57,8 @@ const login = async () => {
       errorMessage.value = "Your password or username is incorrect."; 
     }
   } catch (err) {
-    console.error("Login error:", err);
-    errorMessage.value = err?.message || "Login failed. Please try again.";
+    console.error("login.vue error:", err);
+    errorMessage.value = err?.message || "Something went wrong. Please try again.";
   } finally {
     loading.value = false;
   }

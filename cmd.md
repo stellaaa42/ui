@@ -1,25 +1,9 @@
-curl -X POST \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQyMjE2MDI3LCJpYXQiOjE3NDIyMTU3MjcsImp0aSI6Ijg0Yzg0NTcyM2NhYjQxOTliYTcyYmI1ZDI3N2FiYjMyIiwidXNlcl9pZCI6MX0.hSXorscsoKUdX21hBSJHNlo0GWpbUNXsVprslrEBL2s" \
-  -d '{ "action": "logout" }' \
-  http://localhost:3000/api/auth/logout
-  
-curl -X POST http://localhost:8000/api/login/ \
-  -H "Content-Type: application/json" \
-  -d '{"username": "test1", "password": "your_password"}' \
-  -c cookies.txt -v
 
-curl -X POST http://127.0.0.1:8000/api/book/ -H "Content-Type: application/json" \
-    -d'{
-        "name": "John Doe",
-        "email": "john@example.com",
-        "address": "123 Main St",
-        "service": 3,
-        "area": 2,
-        "appointment_date": "2025-03-15",
-        "appointment_time": "14:00",
-        "payment_method": "paypal"
-    }'
+
+
+
+curl -X POST
+    -H "Content-Type: application/json" \
 env:
     source env/bin/activate
 

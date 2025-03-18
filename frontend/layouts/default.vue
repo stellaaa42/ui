@@ -20,11 +20,12 @@ header {
 
 <script setup>
 import Navbar from "~/components/NavBar.vue";
-import { useCookie } from "#app";
+import { useAuth } from "@/composables/useAuth";
 
 const trackingConsent = useCookie("tracking_consent");
 const trackingData = useCookie("tracking_data", { default: () => [] });
 const startTime = ref(Date.now());
+const { user, fetchUser } = useAuth();
 
 setInterval(async () => {
   if (trackingConsent.value === "accepted") {
@@ -37,8 +38,9 @@ setInterval(async () => {
   }
 }, 5000);
 
-
 onMounted(() => {
+  fetchUser();
+
   if (trackingConsent.value === "accepted") {
     // Track clicks
     document.addEventListener("click", (e) => {

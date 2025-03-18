@@ -1,68 +1,26 @@
-// import { useCookie } from '#app';
+import { ref } from "vue";
 
-// export function useAuth() {
-//   const user = useCookie('user', { default: () => null });
-//   const isAuthenticated = computed(() => !!user.value);
+import { useState } from "nuxt/app";
 
-//   async function login(username: string, password: string) {
-//     const config = useRuntimeConfig();
-//     const { data, error } = await useFetch<{ user: any } | null>(
-//       `${config.public.apiBase}/auth/login`, 
-//       {
-//       method: 'POST',
-//       body: { username, password },
-//     });
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
 
-//     if (data.value && !error.value) {
-//       user.value = data.value.user;
-//       navigateTo("/dashboard");
-//       return { success: true };
-//     }
+export function useAuth() {
+  const user = useState<any | null>("user", () => null); // ✅ Explicitly typed user
+  const authenticated = useState<boolean>("authenticated", () => false); // ✅ Typed as boolean
 
-//     return { success: false, message: error.value?.message || "Login failed" };
-//   }
+  const fetchUser = async () => {
+    const response = await useFetch<{ authenticated: boolean; user: any }>("/api/auth/me", {
+      credentials: "include",
+    });
 
-//   async function signup(username: string, password: string) {
-//     const config = useRuntimeConfig();
-//     const { data, error } = await useFetch<{ message: string } | null>(
-//       `${config.public.apiBase}/auth/signup`, 
-//       {
-//       method: 'POST',
-//       body: { username, password },
-//     });
+    authenticated.value = response.data.value?.authenticated ?? false; 
+    user.value = response.data.value?.user || null;
+    console.log("✅ composables/useAuth.ts fetchUser() - Updated user:", user.value);
+  };
 
-//     if (data.value && !error.value) {
-//       return { success: true, message: data.value.message };
-//     }
-
-//     return { success: false, message: error.value?.message || "Signup failed" };
-//   }
-
-//   async function loginWithOAuth(provider: string) {
-//     const config = useRuntimeConfig();
-//     const { data, error } = await useFetch<{ user: any } | null>(
-//       `${config.public.apiBase}/auth/oauth/${provider}`, {
-//       method: 'GET',
-//     });
-
-//     if (data.value && !error.value) {
-//       user.value = data.value.user;
-//       navigateTo("/dashboard");
-//       return { success: true };
-//     }
-
-//     return { success: false, message: error.value?.message || "OAuth login failed" };
-//   }
-
-//   async function logout() {
-//     const config = useRuntimeConfig();
-//     await useFetch(
-//       `${config.public.apiBase}/auth/logout`, { 
-//         method: 'POST' 
-//       });
-//     user.value = null;
-//     navigateTo("/");
-//   }
-
-//   return { user, isAuthenticated, login, signup, loginWithOAuth, logout };
-// }
+  return { user, authenticated, fetchUser };
+}
