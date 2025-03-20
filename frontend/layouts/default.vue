@@ -27,7 +27,10 @@ const trackingData = useCookie("tracking_data", { default: () => [] });
 const startTime = ref(Date.now());
 const { user, fetchUser } = useAuth();
 
-setInterval(async () => {
+onMounted(() => {
+  fetchUser();
+
+  setInterval(async () => {
   if (trackingConsent.value === "accepted") {
     await $fetch("/api/tracking", {
       method: "POST",
@@ -37,9 +40,6 @@ setInterval(async () => {
     trackingData.value = []; // Clear stored data after sending
   }
 }, 5000);
-
-onMounted(() => {
-  fetchUser();
 
   if (trackingConsent.value === "accepted") {
     // Track clicks

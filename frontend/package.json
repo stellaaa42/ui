@@ -11,5 +11,10 @@
   },
   "dependencies": {
     "nuxt": "^3.16.0"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^4.0.14"
   }
 }

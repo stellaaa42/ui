@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar">
     <NuxtLink to="/" class="logo">🚀 LOGO-Home</NuxtLink>
-    <NuxtLink to="/book" class="nav-tab">Book</NuxtLink>
+    <NuxtLink to="/book" class="nav-tab">Booking</NuxtLink>
     <NuxtLink to="/blog" class="nav-tab">Blog</NuxtLink>
     <NuxtLink to="/about" class="nav-tab">About Us</NuxtLink>
 
@@ -110,3 +110,4 @@ button {
   color: white;
 }
 </style>
+

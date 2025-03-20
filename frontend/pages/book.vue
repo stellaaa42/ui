@@ -51,6 +51,7 @@
   </template>
   
   <script setup>
+  import { onBeforeRouteLeave } from 'vue-router';
 
   const config = useRuntimeConfig();
 
@@ -74,26 +75,33 @@
     card_cvv: '',
     card_expiration: ''
   });
+
+
+onBeforeRouteLeave((to, from) => {
+  if (!confirm('You have unsaved changes. Are you sure you want to leave?')) {
+    return false; // Block navigation
+  }
+});
   
   const fetchServices = async () => {
-  loading.value = true;
-  errorMessage.value = "";
+    loading.value = true;
+    errorMessage.value = "";
 
-  const { data, error } = await useFetch("/services", {
-    baseURL: config.public.apiBase, // ✅ Uses the correct backend API
-  });
+    const { data, error } = await useFetch("/services", {
+      baseURL: config.public.apiBase, // ✅ Uses the correct backend API
+    });
 
-  console.log("Response status:", status.value);
-  console.log("Data:", data.value);
+    console.log("Response status:", status.value);
+    console.log("Data:", data.value);
 
-  if (error.value) {
-    errorMessage.value = "Failed to load services.";
-    console.error("Service fetch error:", error.value);
-  } else {
-    services.value = data.value;
-  }
+    if (error.value) {
+      errorMessage.value = "Failed to load services.";
+      console.error("Service fetch error:", error.value);
+    } else {
+      services.value = data.value;
+    }
 
-  loading.value = false;
+    loading.value = false;
 };
 
   const fetchAreas = async () => {
