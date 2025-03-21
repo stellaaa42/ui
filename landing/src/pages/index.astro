@@ -3,39 +3,61 @@ import Nav from "../components/Nav.astro";
 import Services from "../components/Services.astro";
 import Newsletter from '../components/Newsletter.astro';
 import background from '../assets/background.svg';
+import logo from '../assets/logo.svg';
 ---
 
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <link rel="icon" href={logo.src} type="image/svg+xml" />
     <title>Improved Design</title>
-    <style>
-      /* Global styles */
-      body {
-        margin: 0;
-        font-family: 'Inter', sans-serif; /* Modern font */
-        color: white;
-      }
-      #background {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: -1;
-        filter: blur(100px); /* Blurred background effect from your CSS */
-      }
-      main {
-        padding: 2rem;
-      }
-    </style>
   </head>
   <body>
-    <img id="background" src={background.src} alt="" fetchpriority="high" />
-    <Nav />
+    <img id="background" src={background.src} alt="Blurred background" fetchpriority="high" />
+    <Nav background-src={background.src} />
     <main>
+      <div class="hero">
+        <h1>Hero Section </h1>
+        <p>what does it do in the simplest form</p>
+      </div>
       <Services />
     </main>
     <Newsletter />
   </body>
 </html>
+
+<style>
+  /* Global styles */
+  body {
+    margin: 0;
+    font-family: 'Inter', sans-serif; /* Modern font */
+    color: white;
+  }
+  #background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    filter: blur(100px); /* Blurred background effect from your CSS */
+  }
+  main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh; /* Full viewport height */
+    text-align: center;
+  }
+  .hero h1 {
+    font-size: 3rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Improves readability */
+    margin: 0;
+  }
+  .hero p {
+    font-size: 1.5rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    margin: 0.5rem 0 0;
+  }
+</style>

@@ -1,12 +1,66 @@
+---
+import logo from '../assets/logo.svg';
+// Ensures localStorage is only accessed in the browser
+const isLoggedIn = typeof window !== "undefined" && localStorage.getItem("google_token");
+---
+
+<head>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+
 <nav>
-  <div class="logo">LOGO</div>
+  <!-- <img id="background" src={background.src} alt="Blurred background" fetchpriority="high" /> -->
+  <div class="logo">
+    <img src={logo.src} alt="Logo" />
+    HOME
+  </div>
   <div class="links">
-    <a href="#" class="button">Home</a>
-    <a href="#" class="button">Services</a>
+    <a href="#" class="button">Booking</a>
+    <a href="#" class="button">Blog</a>
     <a href="#" class="button">About</a>
-    <a href="#" class="button">Contact</a>
+    <div id="google-login-button"></div>
+    {isLoggedIn ? (
+      <button id="logout-button">Logout</button>
+    ) : (
+      <div id="google-login-button"></div>
+    )}
   </div>
 </nav>
+
+<script>
+  console.log("Current origin:", window.location.origin);
+  window.onload = function () {
+    const googleClientId = import.meta.env.PUBLIC_GOOGLE_CLIENT_ID;
+    console.log("Google Client ID:", googleClientId);
+
+    if (!googleClientId || googleClientId === "undefined") {
+      console.error("Google Client ID is missing!");
+      return;
+    }
+
+    google.accounts.id.initialize({
+      client_id: "28745403363-9stn5an0ecsm8s6t67cosat0qti8plrr.apps.googleusercontent.com",
+      callback: handleCredentialResponse,
+    });
+
+    google.accounts.id.renderButton(
+      document.getElementById("google-login-button"),
+      { theme: "outline", size: "large" } // Customize button style
+    );
+  };
+
+
+  function handleCredentialResponse(response) {
+    if (!response || !response.credential) {
+    console.error("Google login failed or user canceled.");
+    return;
+  }
+
+    console.log("Google Token:", response.credential);
+    localStorage.setItem("google_token", response.credential);
+    location.reload(); // Reload to update UI
+  }
+</script>
 
 <style>
   nav {
@@ -42,5 +96,9 @@
   .button:hover {
     color: rgb(230, 230, 230); /* Your hover color */
     box-shadow: none; /* Your hover effect */
+  }
+  .logo img {
+    height: 68px; /* Twice button height */
+    width: 96px;  /* Twice button width */
   }
 </style>
