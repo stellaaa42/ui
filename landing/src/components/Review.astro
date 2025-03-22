@@ -1,0 +1,111 @@
+---
+import googleLogo from '../assets/google-logo.png';
+---
+
+<section class="reviews">
+    <h2 class="reviews-title">
+      <img src={googleLogo.src} alt="Google" class="google-logo">
+      GOOGLE REVIEWS
+    </h2>
+    <div class="reviews-container">
+      <div class="review-card">
+        <div class="reviewer-info">
+          <h3 class="reviewer-name">John Doe</h3>
+          <div class="rating">★★★★★</div>
+        </div>
+        <p class="review-text">This is a great service! Highly recommend.</p>
+      </div>
+      <div class="review-card">
+        <div class="reviewer-info">
+          <h3 class="reviewer-name">Jane Smith</h3>
+          <div class="rating">★★★★☆</div>
+        </div>
+        <p class="review-text">Good experience, but could be improved.</p>
+      </div>
+      <div class="review-card">
+        <div class="reviewer-info">
+          <h3 class="reviewer-name">Alice Johnson</h3>
+          <div class="rating">★★★★★</div>
+        </div>
+        <p class="review-text">Absolutely fantastic! Will use again.</p>
+      </div>
+    </div>
+  </section>
+
+
+  <style>
+  .reviews {
+    background-color: #2E2E2E;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    margin: 20px 0;
+  }
+  
+  .reviews-title {
+    color: #FFFFFF;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 24px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .google-logo {
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+  }
+  
+  .reviews-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  
+  .review-card {
+    background-color: #2E2E2E;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    width: 30%;
+  }
+  
+  .reviewer-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .reviewer-name {
+    color: #FFFFFF;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0;
+  }
+  
+  .rating {
+    color: #FFD700;
+    font-size: 16px;
+  }
+  
+  .review-text {
+    color: #FFFFFF;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+  }
+  
+  /* Responsive design for smaller screens */
+  @media (max-width: 768px) {
+    .reviews-container {
+      flex-direction: column;
+    }
+    .review-card {
+      width: 100%;
+    }
+  }
+</style>
