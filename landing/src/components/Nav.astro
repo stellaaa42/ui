@@ -1,76 +1,39 @@
 ---
 import logo from '../assets/logo.svg';
-const googleClientId = import.meta.env.PUBLIC_GOOGLE_CLIENT_ID;
-// Ensures localStorage is only accessed in the browser
+// TODO: Change localStorage to a more secure storage solution
 const isLoggedIn = typeof window !== "undefined" && localStorage.getItem("google_token");
 ---
 
-<head>
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
-</head>
-
 <nav>
-  <!-- <img id="background" src={background.src} alt="Blurred background" fetchpriority="high" /> -->
-  <div class="logo">
+  <a href="/" class="logo">
     <img src={logo.src} alt="Logo" />
     HOME
-  </div>
+  </a>
   <div class="links">
-    <a href="#" class="button">Booking</a>
-    <a href="#" class="button">Blog</a>
-    <a href="#" class="button">About</a>
-    <!-- <div id="google-login-button"></div> -->
-    <div id="g_id_onload"
-         data-client_id={googleClientId}
-         data-callback="handleCredentialResponse"
-         data-auto_prompt="false"
-         class="relative z-10">
-    </div>
-    <div class="g_id_signin relative z-10"
-         data-type="standard"
-         data-size="large"
-         data-theme="outline"
-         data-text="sign_in_with"
-         data-shape="rectangular"
-         data-logo_alignment="left">
-    </div>
-    <!-- {isLoggedIn ? (
+    <a href="#booking" class="button">Booking</a>
+    <a href="#blog" class="button">Blog</a>
+    <a href="#faq" class="button">FAQ</a>
+    <a href="#about" class="button">About</a>
+    <div id="googleSignInDiv"></div>
+    {isLoggedIn ? (
       <button id="logout-button">Logout</button>
     ) : (
-      <div id="google-login-button"></div>
-    )} -->
+      <div id="g_id_onload"></div>
+    )}
   </div>
 </nav>
 
-<script >
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script is:inline>
   console.log("Current origin:", window.location.origin);
-  window.onload = function () {
-    const googleClientId = import.meta.env.PUBLIC_GOOGLE_CLIENT_ID;
-    // console.log("Google Client ID:", googleClientId);
+  // const googleClientId = import.meta.env.PUBLIC_GOOGLE_CLIENT_ID;
+  const googleClientId = "28745403363-9stn5an0ecsm8s6t67cosat0qti8plrr.apps.googleusercontent.com"; // Replace with your actual client ID
 
-    if (!googleClientId || googleClientId === "undefined") {
-      console.error("Google Client ID is missing!");
-      return;
-    }
-    // @ts-ignore
-    google.accounts.id.initialize({
-      client_id: googleClientId,
-      callback: handleCredentialResponse,
-    });
-
-    // @ts-ignore
-    google.accounts.id.renderButton(
-      document.getElementById("google-login-button"),
-      { theme: "outline", size: "large" } // Customize button style
-    );
-  };
-
-
-  function handleCredentialResponse(response: any) {
+  function handleCredentialResponse(response) {
     if (!response || !response.credential) {
     console.error("Google login failed or user canceled.");
     return;
-  }
+    }
     const token = response.credential;
     console.log("Google Token:", token);
     const payload = JSON.parse(atob(token.split('.')[1]));
@@ -79,6 +42,28 @@ const isLoggedIn = typeof window !== "undefined" && localStorage.getItem("google
     localStorage.setItem("google_token", response.credential);
     location.reload(); // Reload to update UI
   }
+
+  window.onload = function () {
+    console.log("Google Client ID:", googleClientId);
+
+    if (!googleClientId || googleClientId === "undefined") {
+      console.error("Google Client ID is missing!");
+      return;
+    }
+
+    google.accounts.id.initialize({
+      client_id: googleClientId,
+      callback: handleCredentialResponse,
+      auto_select: false,
+      itp_support: true
+    });
+
+    google.accounts.id.renderButton(
+      // document.getElementById("google-login-button"),
+      document.getElementById("googleSignInDiv"),
+      { theme: "outline", size: "large" } // Customize button style
+    );
+  };
 </script>
 
 <style>
@@ -92,12 +77,17 @@ const isLoggedIn = typeof window !== "undefined" && localStorage.getItem("google
     display: flex;
     justify-content: space-between;
     align-items: center;
-    z-index: 10; /* Ensure it stays on top */
+    z-index: 10;
   }
   .logo {
     font-size: 1.5rem;
     font-weight: bold;
-  }
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: inherit;
+    }
   .links a {
     margin-left: 1rem;
   }

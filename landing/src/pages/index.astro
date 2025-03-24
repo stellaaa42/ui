@@ -1,8 +1,11 @@
 ---
+import Hero from "../components/Hero.astro";
 import Nav from "../components/Nav.astro";
 import Services from "../components/Services.astro";
 import Newsletter from '../components/Newsletter.astro';
-import Reviews from "../components/Review.astro";
+import Reviews from '../components/Reviews.astro';
+import Layout from '../layouts/Layout.astro';
+
 import background from '../assets/background.svg';
 import logo from '../assets/logo.svg';
 ---
@@ -11,19 +14,30 @@ import logo from '../assets/logo.svg';
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" href={logo.src} type="image/svg+xml" />
-    <title>Improved Design</title>
+    <title>meta</title>
   </head>
   <body>
+    <Layout title="Home | meta">
     <img id="background" src={background.src} alt="Blurred background" fetchpriority="high" />
-    <Nav background-src={background.src} />
-    <main>
-      <div class="hero">
-        <h1>Hero Section </h1>
-        <p>what does it do in the simplest form</p>
-      </div>
-      <Services /> 
-      <Reviews />
-    </main>
+      <Nav background-src={background.src} />
+      <main>
+        <Hero />
+        <Services /> 
+        <Reviews />
+        <section id="booking">
+          <h2>Booking</h2>
+          <p>This is where the booking form or info lives.</p>
+        </section>
+        <section id="faq">
+          <h2>FAQ</h2>
+          <p>Here lies the FAQ. Find The Right Question.</p>
+        </section>
+        <section id="about">
+          <h2>About Us</h2>
+          <p>The section where we pretend to be interesting.</p>
+        </section>
+      </main>
+    </Layout>
     <Newsletter />
   </body>
 </html>
@@ -42,9 +56,11 @@ import logo from '../assets/logo.svg';
     width: 100%;
     height: 100%;
     z-index: -1;
+    object-fit: cover;
     filter: blur(100px); /* Blurred background effect from your CSS */
   }
   main {
+    padding-top: 102px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -52,14 +68,10 @@ import logo from '../assets/logo.svg';
     min-height: 100vh; /* Full viewport height */
     text-align: center;
   }
-  .hero h1 {
-    font-size: 3rem;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Improves readability */
-    margin: 0;
-  }
-  .hero p {
-    font-size: 1.5rem;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-    margin: 0.5rem 0 0;
-  }
+  section {
+				padding: 100px 20px;
+				min-height: 100vh;
+				border-bottom: 1px solid #eee;
+				scroll-margin-top: 4rem;
+			}
 </style>

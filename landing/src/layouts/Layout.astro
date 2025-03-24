@@ -1,15 +1,22 @@
+---
+const { title = "Default Site Title" } = Astro.props;
+---
+
 <!doctype html>
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+		<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+		<!-- <link rel="icon" type="image/svg+xml" href="/favicon.svg" /> -->
+		<title>{title}</title>
 	</head>
 	<body>
 		<slot />
 	</body>
+	<footer>
+		Footer
+	</footer>
 </html>
 
 <style>
