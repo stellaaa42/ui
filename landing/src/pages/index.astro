@@ -5,6 +5,7 @@ import Services from "../components/Services.astro";
 import Newsletter from '../components/Newsletter.astro';
 import Reviews from '../components/Reviews.astro';
 import Layout from '../layouts/Layout.astro';
+import Booking from '../components/BookingForm.astro';
 
 import background from '../assets/background.svg';
 import logo from '../assets/logo.svg';
@@ -22,16 +23,17 @@ import logo from '../assets/logo.svg';
       <Nav background-src={background.src} />
       <main>
         <Hero />
-        <Services /> 
+        <Booking />
         <Reviews />
-        <section id="booking">
-          <h2>Booking</h2>
-          <p>This is where the booking form or info lives.</p>
+        <section id="blog">
+          <h2>Blog</h2>
+          <p>Here lies the blog. Read the latest posts.</p>
         </section>
         <section id="faq">
           <h2>FAQ</h2>
           <p>Here lies the FAQ. Find The Right Question.</p>
         </section>
+        <Services /> 
         <section id="about">
           <h2>About Us</h2>
           <p>The section where we pretend to be interesting.</p>
@@ -57,7 +59,8 @@ import logo from '../assets/logo.svg';
     height: 100%;
     z-index: -1;
     object-fit: cover;
-    filter: blur(100px); /* Blurred background effect from your CSS */
+    filter: blur(100px);
+    object-fit: cover;
   }
   main {
     padding-top: 102px;
@@ -67,6 +70,7 @@ import logo from '../assets/logo.svg';
     justify-content: center;
     min-height: 100vh; /* Full viewport height */
     text-align: center;
+    padding: 2rem;
   }
   section {
 				padding: 100px 20px;
@@ -74,4 +78,10 @@ import logo from '../assets/logo.svg';
 				border-bottom: 1px solid #eee;
 				scroll-margin-top: 4rem;
 			}
+  @media (max-width: 768px) {
+    main {
+      padding-top: 60px;
+      padding: 2rem;
+    }
+  }
 </style>

@@ -29,17 +29,56 @@ import googleLogo from '../assets/google-logo.png';
         </div>
         <p class="review-text">Absolutely fantastic! Will use again.</p>
       </div>
-    </div>
+        <div class="review-card">
+          <div class="reviewer-info">
+            <h3 class="reviewer-name">Bob Brown</h3>
+            <div class="rating">★★★☆☆</div>
+          </div>
+          <p class="review-text">Decent service, but not the best.</p>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="reviewer-info">
+          <h3 class="reviewer-name">Eve White</h3>
+          <div class="rating">★★★★★</div>
+        </div>
+        <p class="review-text">Amazing service! Will definitely recommend.</p>
+      </div>
   </section>
 
 
   <style>
-  .reviews {
+  /* .reviews {
     background-color: #2E2E2E;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     padding: 20px;
     margin: 20px 0;
+  } 
+      .review-card {
+    background-color: #2E2E2E;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    width: 30%;
+  }
+  */
+
+  .reviews {
+  overflow-x: auto;
+  display: flex;
+  gap: 1rem;
+  scroll-snap-type: x mandatory;
+  padding: 1rem;
+  }
+
+
+  .review-card {
+    min-width: 300px;
+    background: #222;
+    padding: 1rem;
+    border-radius: 8px;
+    scroll-snap-align: start;
   }
   
   .reviews-title {
@@ -65,13 +104,6 @@ import googleLogo from '../assets/google-logo.png';
     gap: 20px;
   }
   
-  .review-card {
-    background-color: #2E2E2E;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    padding: 15px;
-    width: 30%;
-  }
   
   .reviewer-info {
     display: flex;
@@ -104,8 +136,11 @@ import googleLogo from '../assets/google-logo.png';
     .reviews-container {
       flex-direction: column;
     }
-    .review-card {
+    /* .review-card {
       width: 100%;
-    }
+    } */
+    .review-card {
+    min-width: 80%;
+  }
   }
 </style>
