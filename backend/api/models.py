@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
+import uuid
 
 class Service(models.Model):
     name = models.CharField(max_length=50)
@@ -56,3 +57,21 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return f"{self.username} ({self.email})"
+
+
+class EmailVerify(models.Model):
+    email = models.EmailField()
+    token = models.UUIDField(default=uuid.uuid4, editable=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    # Optional fields (because who doesn't love a field we might never fill?)
+    name = models.CharField(max_length=100, blank=True, null=True)
+    phone = models.CharField(max_length=20, blank=True, null=True)
+    zip_code = models.CharField(max_length=10, blank=True, null=True)
+    area = models.CharField(max_length=50, blank=True, null=True)
+    options = models.CharField(max_length=50, blank=True, null=True)
+
+    verified = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.email} - {self.token}"

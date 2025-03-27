@@ -1,11 +1,10 @@
 import stripe
 from rest_framework import serializers
 from django.conf import settings
-from .models import Booking, Service, Area
+from .models import Booking, Service, Area, EmailVerify
 from datetime import date, datetime
 import re
 
-# stripe.api_key = settings.STRIPE_SECRET_KEY
 
 class ServiceSerializer(serializers.ModelSerializer):
     class Meta:
@@ -63,3 +62,10 @@ class BookingSerializer(serializers.ModelSerializer):
         # validated_data["payment_status"] = "authorized"
 
         # return super().create(validated_data)
+
+class EmailVerifySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EmailVerify
+        fields = '__all__'
+
+# stripe.api_key = settings.STRIPE_SECRET_KEY

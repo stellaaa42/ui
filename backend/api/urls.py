@@ -1,7 +1,7 @@
 from django.urls import path, include
 from .views import (
     ServiceListView, AreaListView, BookingCreateView, 
-    BookingListView,
+    BookingListView, SubView, VerifyEmailView,
 )
 from .auth_views import (
     SignupView, LogoutView, UserInfoView, LoginView,
@@ -23,4 +23,6 @@ urlpatterns = [
             path('user-info/', UserInfoView.as_view(), name='user_info'),
 
         ])),
+    path('sub/', SubView.as_view(), name='sub'),
+    path('verify/', VerifyEmailView.as_view(), name='verify'),
 ]
