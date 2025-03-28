@@ -3,8 +3,8 @@
 
 <section id="booking" class="booking-section">
   <div class="booking-content">
-    <h2>Booking</h2>
-    <p>we connect you with the top expert in the industry. You get peace of mind and a lot more free time.</p>
+    <h2>Form</h2>
+    <!-- <p>we connect you with the top expert in the industry. You get peace of mind and a lot more free time.</p> -->
     <div class="start-here">START HERE →</div>
     <form class="booking-form">
       <div class="form-row">
@@ -13,20 +13,22 @@
           <input type="text" id="zipcode" name="zipcode" placeholder="Your zip code">
         </div>
         <div class="form-field">
-          <label for="bedrooms">BEDROOMS</label>
-          <select id="bedrooms" name="bedrooms">
-            <option value="1" selected>1 bedroom</option>
-            <option value="2">2 bedrooms</option>
-            <option value="3">3 bedrooms</option>
-            <option value="4">4 bedrooms</option>
+          <!-- <label for="area">area</label> -->
+          <label for="areas">area</label>
+          <select id="areas" name="areas">
+            <option value="1" selected>1 area</option>
+            <option value="2">2 areas</option>
+            <option value="3">3 areas</option>
+            <option value="4">4 areas</option>
           </select>
         </div>
         <div class="form-field">
-          <label for="property-type">PROPERTY TYPE</label>
+          <!-- <label for="property-type">PROPERTY TYPE</label> -->
+          <label for="property-type">options</label>
           <select id="property-type" name="property-type">
-            <option value="vacation-rental" selected>VACATION RENTAL</option>
-            <option value="apartment">Apartment</option>
-            <option value="house">House</option>
+            <option value="options" selected>options</option>
+            <!-- <option value="vacation-rental" selected>VACATION RENTAL</option> -->
+            <!-- <option value="residential">Residential</option> -->
           </select>
         </div>
         <div class="form-field">
@@ -42,11 +44,13 @@
           <input type="email" id="email" name="email" placeholder="Insert your email" required>
         </div>
       </div>
-      <button type="submit" class="submit-button">Book Now From €35</button>
+      <!-- <button type="submit" class="submit-button">Book Now From €35</button> -->
+      <button type="submit" class="submit-button">Button</button>
     </form>
   </div>
   <div class="promise-badge">
-    <div class="badge">THE PROMISE</div>
+    <!-- <div class="badge">THE PROMISE</div> -->
+    <div class="badge">Badge</div>
   </div>
   <div class="mobile-icons">
     <span class="icon">←</span>
@@ -56,30 +60,46 @@
 </section>
 
 <script>
-    const form = document.getElementById('booking-form');
-    if (form) {
-      form.addEventListener('submit', async (event) => {
-      event.preventDefault(); // Stop the default form submission
-      const formData = new FormData(event.target as HTMLFormElement);
-      console.log([...formData.entries()]);
-      const response = await fetch('/api/submit-form', {
-        method: 'POST',
-        body: formData,
+    document.addEventListener('DOMContentLoaded', function() {
+      const form = document.querySelector('.booking-form');
+      console.log('domcontent', form);
+      if (form) {
+        form.addEventListener('submit', async (event) => {
+        event.preventDefault(); // Stop the default form submission
+        const formData = new FormData(event.target as HTMLFormElement);
+        console.log("formData.entries:");
+        console.log([...formData.entries()]);
+        console.log("Object.fromEntries(formData):");
+        console.log(Object.fromEntries(formData));
+        console.log(JSON.stringify(Object.fromEntries(formData)));
+        const response = await fetch('http://localhost:8000/api/sub/', {
+          method: 'POST',
+          // body: JSON.stringify({ email: formData.get('email') }),
+          body: JSON.stringify(Object.fromEntries(formData)),
+          headers: { 'Content-Type': 'application/json' },
+          // 'X-CSRFToken': getCookie('csrftoken'), // if you're using CSRF protection
+        });
+
+        console.log('Response status:', response.status);
+        const responseText = await response.text();
+        console.log('Response body:', responseText);
+        if (response.ok) {
+          //TODO: GO TO API /booking/
+          alert('Form submitted successfully!');
+        } else {
+          alert('form response not ok.');
+        }
       });
-      if (response.ok) {
-        alert('Form submitted successfully!');
       } else {
-        alert('Error submitting form.');
+        console.error('Form null');
       }
     });
-    }
-
   </script>
 
 <style>
   /* Section Styling */
   .booking-section {
-    background: linear-gradient(135deg, rgba(40, 167, 69, 0.1), rgba(0, 123, 255, 0.1)), url('https://example.com/cleaning-background.jpg');
+    background: linear-gradient(135deg, rgba(40, 167, 69, 0.1), rgba(0, 123, 255, 0.1));
     background-size: cover;
     background-position: center;
     padding: 20px;

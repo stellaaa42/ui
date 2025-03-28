@@ -1,0 +1,37 @@
+---
+const { email, token } = Astro.props;
+---
+
+<html>
+  <head>
+    <title>Verifying Email</title>
+  </head>
+  <body>
+    <p>Verifying your email...</p>
+    <script>
+      const email = new URLSearchParams(window.location.search).get('email');
+      const token = new URLSearchParams(window.location.search).get('token');
+      const verifyEmail = async () => {
+        if (!email || !token) {
+        console.error('Missing email or token');
+        return;
+        }
+        
+        try {
+          const response = await fetch(
+            `http://localhost:8000/api/verify/?email=${encodeURIComponent(email)}&token=${token}`
+          );
+          const data = await response.json();
+          if (response.ok) {
+            window.location.href = '/success';
+          } else {
+            window.location.href = '/error';
+          }
+        } catch (error) {
+          window.location.href = '/error';
+        }
+      };
+      verifyEmail();
+    </script>
+  </body>
+</html>

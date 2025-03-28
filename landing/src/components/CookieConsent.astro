@@ -1,0 +1,85 @@
+---
+---
+<div id="cookie-consent" style="display: none;">
+  <p>
+    We use cookies to enhance your browsing experience and analyze our traffic.
+    By clicking "Accept", you consent to our use of cookies.
+    <a href="/privacy">Learn more</a>
+  </p>
+  <button id="accept-cookies">Accept</button>
+  <button id="setting-cookies">Change settings</button>
+</div>
+
+<script type="module">
+console.log('CookieConsent loaded');
+  document.addEventListener("DOMContentLoaded", () => {
+    console.log('dom CookieConsent loaded');
+    const consent = localStorage.getItem("cookieConsent");
+    const banner = document.getElementById("cookie-consent");
+
+    if (consent === "accepted") {
+      loadAnalyticsScripts();
+    }
+    else if (!consent) {
+    //TODO: Change settings
+      banner.style.display = "block";
+    }
+
+    document.getElementById("accept-cookies").addEventListener("click", () => {
+      localStorage.setItem("cookieConsent", "accepted");
+    //   banner.style.display = "none";
+      loadAnalyticsScripts();
+    });
+
+    // Decline button logic
+    document.getElementById("setting-cookies").addEventListener("click", () => {
+      localStorage.setItem("cookieConsent", "setting");
+    //   banner.style.display = "none";
+    });
+  });
+
+  function loadAnalyticsScripts() {
+    const script = document.createElement("script");
+    //TODO: Tracking
+    script.src = "https://example.com/analytics.js"; // Replace with actual script URL
+    script.async = true;
+    document.body.appendChild(script);
+  }
+</script>
+
+<style>
+    #cookie-consent {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: #333;
+      color: #fff;
+      padding: 1rem;
+      text-align: center;
+      z-index: 1000;
+    }
+  
+    #cookie-consent p {
+      margin: 0 0 0.5rem 0;
+    }
+  
+    #cookie-consent a {
+      color: #fff;
+      text-decoration: underline;
+    }
+  
+    #cookie-consent button {
+      margin: 0 0.5rem;
+      padding: 0.5rem 1rem;
+      background-color: #fff;
+      color: #333;
+      border: none;
+      cursor: pointer;
+    }
+  
+    #cookie-consent button:hover {
+      background-color: #ddd;
+    }
+  </style>
+  

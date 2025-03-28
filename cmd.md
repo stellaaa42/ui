@@ -1,6 +1,8 @@
-
-curl -X POST
+curl:
+    curl -X GET http://localhost:8000/api/sub -c cookies.txt
+    curl -X POST
     -H "Content-Type: application/json" \
+
 env:
     source env/bin/activate
 
@@ -23,6 +25,18 @@ django:
     python manage.py makemigrations api
     python migrate
     python manage.py runserver --verbose
+
+    python manage.py shell
+    from api.models import EmailVerify
+
+    entries = EmailVerify.objects.filter(email='xx')
+
+    for entry in entries:
+        print(f" - ID: {e.id}, Token: {e.token}, Created at: {e.created_at}")
+        
+        print(f"Deleting entry ID: {entry.id} | {entry.email}")
+        entry.delete()
+
 sqlite3:
     rm db.sqlite3
     sqlite3 shell
