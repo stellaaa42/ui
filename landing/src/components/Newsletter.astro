@@ -1,4 +1,4 @@
-<div id="newsletter">
+<div class="newsletter">
   <h2>Subscribe to Our Newsletter</h2>
   <p>Stay updated with our latest news and offers.</p>
   <form>
@@ -7,8 +7,23 @@
   </form>
 </div>
 
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const newsletter = document.querySelector('.newsletter');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  observer.observe(newsletter);
+});
+</script>
+
 <style>
-  #newsletter {
+  .newsletter {
     position: fixed;
     bottom: 2rem;
     right: 2rem;
@@ -17,7 +32,17 @@
     border-radius: 10px;
     width: 300px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+
+    opacity: 0;
+    transform: translateX(20px);
+    transition: opacity 0.5s ease-in, transform 0.5s ease-in;
+    }
+
+  .newsletter.visible {
+    opacity: 1;
+    transform: translateX(0);
   }
+
   h2 {
     font-size: 1.5rem;
     margin-bottom: 0.5rem;

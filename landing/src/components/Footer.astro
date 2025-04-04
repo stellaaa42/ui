@@ -1,0 +1,85 @@
+---
+// Example Astro component for site footer (dark theme)
+---
+<footer class="site-footer">
+  <div class="footer-top">
+    <!-- Quick Links -->
+    <div class="footer-section">
+      <h3>Products</h3>
+      <ul>
+        <li><a href="/features">Features</a></li>
+        <li><a href="/pricing">Pricing</a></li>
+        <li><a href="/download">Download</a></li>
+      </ul>
+    </div>
+    <div class="footer-section">
+      <h3>Company</h3>
+      <ul>
+        <li><a href="/about">About Us</a></li>
+        <li><a href="/blog">Blog</a></li>
+        <li><a href="/careers">Careers</a></li>
+      </ul>
+    </div>
+    <div class="footer-section">
+      <h3>Support</h3>
+      <ul>
+        <li><a href="/help">Help Center</a></li>
+        <li><a href="/contact">Contact Us</a></li>
+        <li><a href="/policy">Privacy Policy</a></li>
+      </ul>
+    </div>
+    <!-- Contact Info / Social Media -->
+    <div class="footer-section contact-section">
+      <h3>Contact</h3>
+      <p><a href="mailto:contact@galacticcorp.com">contact@galacticcorp.com</a></p>
+      <p>123 Space St, Nebula City</p>
+      <div class="social-icons">
+        <a href="#" aria-label="Twitter" class="social-icon twitter-icon"></a>
+        <a href="#" aria-label="Facebook" class="social-icon facebook-icon"></a>
+        <a href="#" aria-label="Instagram" class="social-icon instagram-icon"></a>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2025 GalacticCorp. All rights reserved.</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+  padding: 2rem;
+  background: linear-gradient(to bottom, #0a0a0a, #15001a); /* subtle cosmic gradient */
+  color: #ccc;
+}
+
+.footer-top {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.footer-section h3 {
+  color: #fff;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.footer-section a {
+  color: #66ccff; /* bright sci-fi blue */
+  text-decoration: none;
+}
+.footer-section a:hover {
+  color: #1aff1a;
+  text-shadow: 0 0 5px #1aff1a;
+}
+
+.footer-bottom {
+  text-align: center;
+  margin-top: 2rem;
+  font-size: 0.85rem;
+  color: #888;
+}
+
+</style>

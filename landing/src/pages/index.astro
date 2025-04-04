@@ -1,6 +1,7 @@
 ---
+import Header from "../components/Header.astro";
+import Footer from '../components/Footer.astro';
 import Hero from "../components/Hero.astro";
-import Nav from "../components/Nav.astro";
 import Services from "../components/Services.astro";
 import Newsletter from '../components/Newsletter.astro';
 import Reviews from '../components/Reviews.astro';
@@ -21,7 +22,7 @@ import logo from '../assets/logo.svg';
   <body>
     <Layout title="Home | meta">
     <img id="background" src={background.src} alt="Blurred background" fetchpriority="high" />
-      <Nav background-src={background.src} />
+      <Header />
       <main>
         <Hero />
         <Bookingform />
@@ -37,6 +38,7 @@ import logo from '../assets/logo.svg';
           <p>The section where we pretend to be interesting.</p>
         </section>
       </main>
+      <Footer />
     </Layout>
     <Newsletter />
   </body>

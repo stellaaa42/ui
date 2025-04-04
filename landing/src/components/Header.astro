@@ -1,0 +1,50 @@
+---
+import Nav from "../components/Nav.astro";
+
+import background from '../assets/background.svg';
+import logo from '../assets/logo.svg';
+---
+
+<header class="header">
+    <div class="logo">
+      <a href="/">
+        <img src={logo.src} alt="Site Logo" />
+      </a>
+    </div>
+    <Nav background-src={background.src} />
+  </header>
+  
+  <style>
+    .header {
+      position: sticky;
+      background-color: #f8f9fa;
+      padding: 0.5rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+      width: 100%;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .logo img {
+      height: 50px;
+    }
+    .navigation ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+      margin: 0;
+      padding: 0;
+    }
+    .navigation a {
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+      font-family: Arial, sans-serif;
+      height: 100%;
+      overflow-x: hidden;
+    }
+    .navigation a:hover {
+      color: #007bff;
+    }
+  </style>
