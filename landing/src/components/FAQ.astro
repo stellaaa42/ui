@@ -1,56 +1,28 @@
 ---
 const faqData = {
-  Account: [
+  Acct: [
     {
-      question: "How do I create an account?",
-      answer: "To create an account, click on the \"Sign Up\" button at the top right corner and follow the prompts."
+      question: "Q1?",
+      answer: 
+        "a1"
     }
   ],
-  Payment: [
+  P: [
     {
-      question: "What payment methods do you accept?",
-      answer: "We accept credit cards, PayPal, and Apple Pay."
+      question: "Q2?",
+      answer: "a2"
     },
     {
-      question: "How do I apply a promo code?",
-      answer: "To apply a promo code, enter it in the \"Promo Code\" field during checkout."
+      question: "Q1?",
+      answer: "a3"
     }
   ],
-  Shipping: [
-    {
-      question: "Do you ship internationally?",
-      answer: "Yes, we ship to most countries worldwide."
-    },
-    {
-      question: "How long does shipping take?",
-      answer: "Shipping times vary depending on your location, but typically take 3-5 business days for domestic orders and 7-14 business days for international orders."
-    },
-    {
-      question: "How can I track my order?",
-      answer: "Once your order is shipped, you'll receive a tracking number via email."
-    },
-    {
-      question: "Can I change or cancel my order after it's placed?",
-      answer: "If you need to change or cancel your order, please contact our customer support team as soon as possible. We'll do our best to accommodate your request, but cannot guarantee changes once the order has been processed."
-    }
-  ],
-  Returns: [
-    {
-      question: "What is your return policy?",
-      answer: "You can return items within 30 days of purchase for a full refund. Items must be in their original condition and packaging. Please contact our customer support team to initiate a return."
-    }
-  ],
-  Support: [
-    {
-      question: "How do I contact customer support?",
-      answer: "You can reach our customer support team via email at support@example.com or by phone at 1-800-123-4567."
-    }
-  ]
+
 };
 ---
 
 <section class="faq">
-  <h2>Frequently Asked Questions</h2>
+  <h2>FAQs</h2>
   {Object.entries(faqData).map(([category, items]) => (
     <div class="faq-category">
       <h3>{category}</h3>

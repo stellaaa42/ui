@@ -8,9 +8,11 @@ import Reviews from '../components/Reviews.astro';
 import Layout from '../layouts/Layout.astro';
 import Bookingform from '../components/BookingForm.astro';
 import FAQ from '../components/FAQ.astro';
+import Preview from '../components/Preview.astro';
 
 import background from '../assets/background.svg';
 import logo from '../assets/logo.svg';
+
 ---
 
 <html lang="en">
@@ -27,16 +29,9 @@ import logo from '../assets/logo.svg';
         <Hero />
         <Bookingform />
         <Reviews />
-        <section id="blog">
-          <h2>Blog</h2>
-          <p>Here lies the blog. Read the latest posts.</p>
-        </section>
+        <Preview />
         <FAQ />
         <Services /> 
-        <section id="about">
-          <h2>About Us</h2>
-          <p>The section where we pretend to be interesting.</p>
-        </section>
       </main>
       <Footer />
     </Layout>

@@ -1,0 +1,28 @@
+---
+import { getCollection } from 'astro:content';
+
+const blogEntries = await getCollection('blog');
+console.log('blog blogEntries', blogEntries);
+
+interface BlogEntry {
+  slug: string;
+  data: {
+    title: string;
+    date: Date;
+    author: string;
+    // Add other properties as needed
+  };
+}
+const sortedEntries = blogEntries.sort((a: BlogEntry, b: BlogEntry) => {
+  return new Date(b.data.date).getTime() - new Date(a.data.date).getTime();
+});
+---
+
+<h1>B</h1>
+<ul>
+  {sortedEntries.map((entry: BlogEntry) => (
+    <li>
+      <a href={`/blog/${entry.slug}`}>{entry.data.title}</a> - {entry.data.date.toDateString()} by {entry.data.author}
+    </li>
+  ))}
+</ul>

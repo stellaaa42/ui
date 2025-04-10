@@ -1,9 +1,9 @@
 <div class="newsletter">
-  <h2>Subscribe to Our Newsletter</h2>
-  <p>Stay updated with our latest news and offers.</p>
+  <h2>Sub</h2>
+  <p>offer</p>
   <form>
-    <input type="email" placeholder="Enter your email" />
-    <button class="button">Subscribe</button>
+    <input type="email" placeholder="" />
+    <button class="button">Sub</button>
   </form>
 </div>
 
@@ -18,7 +18,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }, { threshold: 0.1 });
 
-  observer.observe(newsletter);
+  if (newsletter) {
+    observer.observe(newsletter);
+  }
 });
 </script>
 

@@ -1,0 +1,32 @@
+---
+const { title, date, author } = Astro.props;
+
+interface BlogEntry {
+  slug: string;
+  data: {
+    title: string;
+    date: Date;
+    author: string;
+    // Add other properties as needed
+  };
+}
+
+---
+
+<html lang="en">
+  <head>
+    <title>{title}</title>
+  </head>
+  <body>
+    <header>
+      <h1>{title}</h1>
+      <p>Posted on {date.toDateString()} by {author}</p>
+    </header>
+    <main>
+      <slot /> <!-- Renders the post content passed from [slug].astro -->
+    </main>
+    <footer>
+      <p>Back to <a href="/blog">Blog</a></p>
+    </footer>
+  </body>
+</html>
